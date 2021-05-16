@@ -1,0 +1,11 @@
+!.gitignore
+build/
+build*
+*.o
+*.so
+*.a
+*.so.*
+image/
+image*
+.vscode/
+
