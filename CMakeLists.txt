@@ -75,6 +75,10 @@ target_link_libraries(test_thermal_association ${PROJECT_NAME} ${PCL_LIBRARIES} 
 add_executable(test_read_img test/test_read_img.cpp)
 target_link_libraries(test_read_img ${PROJECT_NAME})
 
+add_executable(test_pose_solve test/test_pose_solve.cpp)
+target_link_libraries(test_pose_solve ${PROJECT_NAME})
+
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)

@@ -15,6 +15,9 @@ int main( int argc, char** argv)
     string sThermalConfigPath = "/media/jjj/shuaibi/NGC_data/desk_xyz/";
 
     GetImageDataWithNum(vThermalImg, sThermalDataPath, sThermalConfigPath, 5);
+
+    cout << vThermalImg.size()<< endl;
+    cout << vThermalImg[0].first << fixed << vThermalImg[0].second.size << endl;
     
     return 0;
 }

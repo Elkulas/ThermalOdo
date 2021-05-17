@@ -73,7 +73,7 @@ void GetImageDataWithNum(vector<pair<double, cv::Mat>>& imgDataset,
 
     int count = 0;
 
-    while(getline(fsImage, sImage_file) && !sImage_line.empty())
+    while(getline(fsImage, sImage_line) && !sImage_line.empty())
     {
         if(count == num) break;
 
