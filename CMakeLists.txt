@@ -15,6 +15,8 @@ find_package(Eigen3 3.1.0 REQUIRED)
 
 find_package(PCL 1.7 REQUIRED)
 
+find_package(Boost REQUIRED COMPONENTS filesystem program_options system)
+
 message(STATUS "OpenCV library status:")
 message(STATUS "    version: ${OpenCV_VERSION}")
 message(STATUS "    libraries: ${OpenCV_LIBS}")
@@ -36,6 +38,7 @@ include_directories(
     ${OpenCV_INCLUDE_DIRS} 
     ${EIGEN3_INCLUDE_DIR}
     ${PCL_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
 )
 
 
@@ -53,11 +56,13 @@ src/localUtils/localUtils.cc
 src/Utils/projection.cc
 src/Utils/feature.cc
 src/Utils/algorithm.cc
-
+src/Utils/ReadData.cc
 )
+
 
 target_link_libraries(${PROJECT_NAME}
 ${OpenCV_LIBS}
+${Boost_LIBRARIES}
 )
 
 # 生成可执行文件
@@ -66,6 +71,9 @@ target_link_libraries(test_orb_extract ${PROJECT_NAME})
 
 add_executable(test_thermal_association test/test_thermal_association.cpp)
 target_link_libraries(test_thermal_association ${PROJECT_NAME} ${PCL_LIBRARIES} ${EIGEN3_LIBS})
+
+add_executable(test_read_img test/test_read_img.cpp)
+target_link_libraries(test_read_img ${PROJECT_NAME})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
