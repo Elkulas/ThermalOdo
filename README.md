@@ -1,4 +1,6 @@
-# ORBextract
+# ThermalOdo
+
+关于红外odometery的研究
 
 从ORBSLAM中抽取以下部分组成的单独模块：
 

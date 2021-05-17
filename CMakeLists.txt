@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(orbextract VERSION 0.1.0)
+project(thermalodo VERSION 0.1.0)
 
 set( CMAKE_BUILD_TYPE "Release" )
 set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
@@ -7,22 +7,28 @@ set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
 include(CTest)
 enable_testing()
 
+######## packages ########
 set(OpenCV_DIR "/home/jjj/CodeSrc/opencv-4.4.0/build")
 find_package(OpenCV 4.0 QUIET)
+
+find_package(Eigen3 3.1.0 REQUIRED)
+
+find_package(PCL 1.7 REQUIRED)
+
 message(STATUS "OpenCV library status:")
 message(STATUS "    version: ${OpenCV_VERSION}")
 message(STATUS "    libraries: ${OpenCV_LIBS}")
 message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 
-find_package(Eigen3 3.1.0 REQUIRED)
 message(STATUS "Eigen3 include path: ${EIGEN3_INCLUDE_DIR}")
 
-find_package(PCL 1.7 REQUIRED)
 message(STATUS "pcl include dir ${PCL_INCLUDE_DIRS}")
 message(STATUS "pcl VERSION ${PCL_VERSION}")
 
+######## includes ########
 include_directories( 
     ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/include/orb_extract
     ${PROJECT_SOURCE_DIR}/include/Utils
     ${PROJECT_SOURCE_DIR}/include/localUtils
@@ -32,7 +38,12 @@ include_directories(
     ${PCL_INCLUDE_DIRS}
 )
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+
+######## libs ########
+
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 add_library(${PROJECT_NAME} SHARED
 src/orb_extract/ORBextractor.cc
@@ -50,14 +61,11 @@ ${OpenCV_LIBS}
 )
 
 # 生成可执行文件
-add_executable(orb_extract src/orb_extract.cpp)
+add_executable(orb_extract test/orb_extract.cpp)
 target_link_libraries(orb_extract ${PROJECT_NAME})
 
-add_executable(projectRGB src/projectRGB.cpp)
-target_link_libraries(projectRGB ${PROJECT_NAME} ${PCL_LIBRARIES} ${EIGEN3_LIBS})
-
-add_executable(projectRGB2 src/projectRGB_Labdata.cpp)
-target_link_libraries(projectRGB2 ${PROJECT_NAME} ${PCL_LIBRARIES} ${EIGEN3_LIBS})
+add_executable(test_thermal_association test/test_thermal_association.cpp)
+target_link_libraries(test_thermal_association ${PROJECT_NAME} ${PCL_LIBRARIES} ${EIGEN3_LIBS})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
