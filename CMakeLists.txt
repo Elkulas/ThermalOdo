@@ -61,8 +61,8 @@ ${OpenCV_LIBS}
 )
 
 # 生成可执行文件
-add_executable(orb_extract test/orb_extract.cpp)
-target_link_libraries(orb_extract ${PROJECT_NAME})
+add_executable(test_orb_extract test/test_orb_extract.cpp)
+target_link_libraries(test_orb_extract ${PROJECT_NAME})
 
 add_executable(test_thermal_association test/test_thermal_association.cpp)
 target_link_libraries(test_thermal_association ${PROJECT_NAME} ${PCL_LIBRARIES} ${EIGEN3_LIBS})
