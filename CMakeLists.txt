@@ -57,6 +57,7 @@ src/Utils/projection.cc
 src/Utils/feature.cc
 src/Utils/algorithm.cc
 src/Utils/ReadData.cc
+src/Utils/PoseSolve.cc
 )
 
 
