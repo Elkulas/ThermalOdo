@@ -367,25 +367,50 @@ void BoxFilter3(cv::Mat& GradXX, cv::Mat& GradXY, cv::Mat& GradYY, int blocksize
  */
 cv::Mat GetGradImage(cv::Mat& image)
 {
-    cv::Mat Grad(image.size(), CV_16UC1);
-
-    for(int i = 0; i < image.rows; i++)
-    for(int j = 0; j < image.cols; j++)
+    if(image.type() == 2)
     {
-        // 边沿的像素点计算不了,移除
-        // 因为实际自己的数据集存在缺陷,所以在判断条件的过程中间需要考虑到这些
-        // 将错误的点进行去除
-        if(i -1 < 0 || j-1 <0 || j+1 > image.cols || i+1 > image.rows -1 || (i == 478 && j == 639))
+        cv::Mat Grad(image.size(), CV_16UC1);
+
+        for(int i = 0; i < image.rows; i++)
+        for(int j = 0; j < image.cols; j++)
         {
-            Grad.at<ushort>(i,j) = 0;
+            // 边沿的像素点计算不了,移除
+            // 因为实际自己的数据集存在缺陷,所以在判断条件的过程中间需要考虑到这些
+            // 将错误的点进行去除
+            if(i -1 < 0 || j-1 <0 || j+1 > image.cols || i+1 > image.rows -1 || (i == 478 && j == 639))
+            {
+                Grad.at<ushort>(i,j) = 0;
+            }
+            else
+            {
+                // Grad = sqrt(Gx^2 + Gy^2)
+                Grad.at<ushort>(i,j) = (double)sqrt(pow((double)(PointGradXSobel(image,j,i)),2)+pow((double)(PointGradYSobel(image,j,i)),2));
+            }
         }
-        else
-        {
-            // Grad = sqrt(Gx^2 + Gy^2)
-            Grad.at<ushort>(i,j) = (double)sqrt(pow((double)(PointGradXSobel(image,j,i)),2)+pow((double)(PointGradYSobel(image,j,i)),2));
-        }
+        return Grad;
     }
-    return Grad;
+    else if(image.type() == 0)
+    {
+        cv::Mat Grad(image.size(), CV_8UC1);
+
+        for(int i = 0; i < image.rows; i++)
+        for(int j = 0; j < image.cols; j++)
+        {
+            // 边沿的像素点计算不了,移除
+            // 因为实际自己的数据集存在缺陷,所以在判断条件的过程中间需要考虑到这些
+            // 将错误的点进行去除
+            if(i -1 < 0 || j-1 <0 || j+1 > image.cols || i+1 > image.rows -1 || (i == 478 && j == 639))
+            {
+                Grad.at<uchar>(i,j) = 0;
+            }
+            else
+            {
+                // Grad = sqrt(Gx^2 + Gy^2)
+                Grad.at<uchar>(i,j) = (float)sqrt(pow((float)(PointGradXSobel(image,j,i)),2)+pow((float)(PointGradYSobel(image,j,i)),2));
+            }
+        }
+        return Grad;
+    }
 }
 
 /**
@@ -395,25 +420,51 @@ cv::Mat GetGradImage(cv::Mat& image)
  */
 cv::Mat GetGradImageByAdd(cv::Mat& image)
 {
-    cv::Mat Grad(image.size(), CV_16UC1);
-
-    for(int i = 0; i < image.rows; i++)
-    for(int j = 0; j < image.cols; j++)
+    if(image.type() == 2)
     {
-        // 边沿的像素点计算不了,移除
-        // 因为实际自己的数据集存在缺陷,所以在判断条件的过程中间需要考虑到这些
-        // 将错误的点进行去除
-        if(i -1 < 0 || j-1 <0 || j+1 > image.cols || i+1 > image.rows -1 || (i == 478 && j == 639))
+        cv::Mat Grad(image.size(), CV_16UC1);
+
+        for(int i = 0; i < image.rows; i++)
+        for(int j = 0; j < image.cols; j++)
         {
-            Grad.at<ushort>(i,j) = 0;
+            // 边沿的像素点计算不了,移除
+            // 因为实际自己的数据集存在缺陷,所以在判断条件的过程中间需要考虑到这些
+            // 将错误的点进行去除
+            if(i -1 < 0 || j-1 <0 || j+1 > image.cols || i+1 > image.rows -1 || (i == 478 && j == 639))
+            {
+                Grad.at<ushort>(i,j) = 0;
+            }
+            else
+            {
+                // Grad = sqrt(Gx^2 + Gy^2)
+                Grad.at<ushort>(i,j) = (double)(PointGradXSobel(image,j,i))+(double)(PointGradYSobel(image,j,i));
+            }
         }
-        else
-        {
-            // Grad = sqrt(Gx^2 + Gy^2)
-            Grad.at<ushort>(i,j) = (double)(PointGradXSobel(image,j,i))+(double)(PointGradYSobel(image,j,i));
-        }
+        return Grad;
     }
-    return Grad;
+    else if(image.type() == 0)
+    {
+        cv::Mat Grad(image.size(), CV_8UC1);
+
+        for(int i = 0; i < image.rows; i++)
+        for(int j = 0; j < image.cols; j++)
+        {
+            // 边沿的像素点计算不了,移除
+            // 因为实际自己的数据集存在缺陷,所以在判断条件的过程中间需要考虑到这些
+            // 将错误的点进行去除
+            if(i -1 < 0 || j-1 <0 || j+1 > image.cols || i+1 > image.rows -1 || (i == 478 && j == 639))
+            {
+                Grad.at<uchar>(i,j) = 0;
+            }
+            else
+            {
+                // Grad = sqrt(Gx^2 + Gy^2)
+                Grad.at<uchar>(i,j) = (float)(PointGradXSobel(image,j,i))+(float)(PointGradYSobel(image,j,i));
+            }
+        }
+        return Grad;
+    }
+    
 }
 
 /**

@@ -96,8 +96,31 @@ void GetPose(vector<cv::Point2f>& vPts1, vector<cv::Point2f>& vPts2, vector<ucha
     FindFundamental(vPts1, vPts2, vbMatchesInliersF, vSets, SF, F, succ_count, MaxIter);
     std::cout << "CheckPoint4 " << SF << endl << F << std::endl;
 
+    // Step 4 从F解算E,然后解算R t
+    // 统计所有inliners
+    int N;
+    for(size_t i=0, iend = vbMatchesInliersF.size() ; i<iend; i++)
+        if(vbMatchesInliersF[i]) N++;
+    std::cout << "CheckPoint5 " << N  << '\t'<< vbMatchesInliersF.size()<< std::endl;
 
-    //TODO: Merge DecomposeE函数,输出
+    // 根据基础矩阵和相机的内参数矩阵计算本质矩阵
+    cout << "CheckPoint7" << '\t'<< K.type() << '\t' << F.type() << endl;
+
+    cv::Mat E21 = K.t()*F*K;
+
+    
+    // 定义本质矩阵分解结果，形成四组解,分别是：
+    // (R1, t) (R1, -t) (R2, t) (R2, -t)
+    cv::Mat R1, R2, t;
+    DecomposeE(E21,R1,R2,t); 
+
+    cout << "CheckPoint6:" << '\n' << "R: " << '\n' << R1 << '\n' << "t: " << '\n' << t << endl;
+
+    R1.copyTo(R21);
+    t.copyTo(t21);
+
+    return;
+
 }
 
 /**
@@ -484,6 +507,29 @@ float CheckFundamental(
     //  返回评分
     return score;
 }
+
+void DecomposeE(const cv::Mat &E, cv::Mat &R1, cv::Mat &R2, cv::Mat &t)
+{
+    cv::Mat u,w,vt;
+    cv::SVD::compute(E,w,u,vt);
+
+    u.col(2).copyTo(t);
+    t=t/cv::norm(t);
+
+    cv::Mat W(3,3,CV_32F,cv::Scalar(0));
+    W.at<float>(0,1)=-1;
+    W.at<float>(1,0)=1;
+    W.at<float>(2,2)=1;
+
+    R1 = u*W*vt;
+    if(cv::determinant(R1)<0)
+        R1=-R1;
+
+    R2 = u*W.t()*vt;
+    if(cv::determinant(R2)<0)
+        R2=-R2;
+}
+
 
 
 

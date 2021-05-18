@@ -34,3 +34,5 @@ cv::Mat ComputeF21(const vector<cv::Point2f> &vP1, const vector<cv::Point2f> &vP
 
 float CheckFundamental(const cv::Mat &F21, vector<bool> &vbMatchesInliers, float sigma, int succ_count, 
                         vector<cv::Point2f>& vPts1, vector<cv::Point2f>& vPts2);
+
+void DecomposeE(const cv::Mat &E, cv::Mat &R1, cv::Mat &R2, cv::Mat &t);

@@ -5,39 +5,42 @@
 #include "RtGenerator.h"
 
 #include "PoseSolve.h"
+#include "ReadData.h"
+
+// Thermal相机内参(对于RGB来说)
+const float tfx = 1073.717;
+const float tfy = 1086.810;
+const float tcx = 319.896;
+const float tcy = 249.620; 
 
 int main( int argc, char** argv)
 {
-    string thermal_str = "/media/jjj/shuaibi/NGC_data/desk_xyz/thermal/1578561468.864967.png";
-    string thermal16_str = "/media/jjj/shuaibi/NGC_data/desk_xyz/thermalRaw/1578561468.864967.png";
-    string thermal2_str = "/media/jjj/shuaibi/NGC_data/desk_xyz/thermal/1578561469.052306.png";
-    string thermal216_str = "/media/jjj/shuaibi/NGC_data/desk_xyz/thermalRaw/1578561469.052306.png";
+    // 设置读取的情况
+    vector<pair<double, Mat>> vThermalImg;
+    string sThermalDataPath = "/media/jjj/shuaibi/NGC_data/desk_xyz/thermal/";
+    string sThermalConfigPath = "/media/jjj/shuaibi/NGC_data/desk_xyz/";
 
-    cv::Mat thermal = cv::imread(thermal_str);
-    cv::Mat thermal16 = cv::imread(thermal16_str,-1);
-    
-    cv::Mat thermal2 = cv::imread(thermal2_str);
-    cv::Mat thermal216 = cv::imread(thermal216_str,-1);
+    GetImageDataWithNum(vThermalImg, sThermalDataPath, sThermalConfigPath, 5);
 
-    // 在rgb上提点
-    cv::Mat thermalgrey;
-    cv::cvtColor(thermal, thermalgrey, cv::COLOR_BGR2GRAY);
-    cv::Mat thermal2grey;
-    cv::cvtColor(thermal2, thermal2grey, cv::COLOR_BGR2GRAY);
+    cv::imshow("ji", vThermalImg[0].second);
+    cout << vThermalImg[0].second.type()<<endl;
+    cv::waitKey();
 
-    cv::Mat grad1 = GetGradImage(thermal16);
-    cv::Mat grad2 = GetGradImage(thermal216);
 
-    cv::Mat grad1_8 = Swap16To8(grad1);
-    cv::Mat grad2_8 = Swap16To8(grad2);
+    cv::Mat grad1 = GetGradImage(vThermalImg[0].second);
+    cv::Mat grad2 = GetGradImage(vThermalImg[2].second);
+
+    cv::imshow("hgu", grad1);
+    cv::waitKey(0);
+
 
     vector<cv::KeyPoint> kp1;
     cv::Ptr<cv::GFTTDetector> detectorgftt = cv::GFTTDetector::create(500, 0.01, 20); // maximum 500 keypoints
-    detectorgftt->detect(grad1_8, kp1);
+    detectorgftt->detect(grad1, kp1);
 
     cv::Mat lbptest1, lbptest2;
-    getOriginLBPFeature(grad1_8, lbptest1);
-    getOriginLBPFeature(grad2_8, lbptest2);
+    getOriginLBPFeature(vThermalImg[0].second, lbptest1);
+    getOriginLBPFeature(vThermalImg[2].second, lbptest2);
 
     vector<cv::Point2f> pt1, pt2;
     for (auto &kp: kp1) pt1.push_back(kp.pt);
@@ -48,7 +51,30 @@ int main( int argc, char** argv)
 
     SelectMajority(pt1, pt2, status);
 
-    Mat R21,t21,K;
+    cv::Mat img2_CV;
+    int succ_num = 0;
+    cv::cvtColor(vThermalImg[2].second, img2_CV, cv::COLOR_GRAY2BGR);
+    for (int i = 0; i < pt2.size(); i++) {
+        if (status[i]) {
+            succ_num++;
+            cv::circle(img2_CV, pt2[i], 2, cv::Scalar(0, 250, 0), 2);
+            cv::line(img2_CV, pt1[i], pt2[i], cv::Scalar(0, 250, 0));
+        }
+    }
+    cout <<"succ tracked " << succ_num << endl;
+    cout <<"succ tracked size " << status.size() << endl;
+    cv::imshow("hji", img2_CV);
+    cv::waitKey();
+
+    Mat R21,t21;
+
+    Mat K(3,3,CV_32FC1);
+    cout << "hi"<< K.type()<< endl;
+    K = (cv::Mat_<float>(3, 3) << tfx, 0, tcx, 0, tfy, tcy, 0, 0, 1);
+    cout << K.type()<< endl;
+
     GetPose(pt1, pt2, status, R21, t21, K, 200);
+
+
     return 0;
 }
