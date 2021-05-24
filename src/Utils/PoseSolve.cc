@@ -4,8 +4,6 @@
 #include "PoseSolve.h"
 
 
-
-
 void GetPose(vector<cv::Point2f>& vPts1, vector<cv::Point2f>& vPts2, vector<uchar>& vStatus,
              Mat& R21, cv::Mat& t21, cv::Mat K, int MaxIter)
 {
@@ -124,17 +122,16 @@ void GetPose(vector<cv::Point2f>& vPts1, vector<cv::Point2f>& vPts2, vector<ucha
 }
 
 /**
- * @brief 计算单应矩阵，假设场景为平面情况下通过前两帧求取Homography矩阵，并得到该模型的评分
- * 原理参考Multiple view geometry in computer vision  P109 算法4.4
+ * @brief 计算基础矩阵，假设场景为非平面情况下通过前两帧求取Fundamental矩阵，得到该模型的评分
  * Step 1 将当前帧和参考帧中的特征点坐标进行归一化
  * Step 2 选择8个归一化之后的点对进行迭代
- * Step 3 八点法计算单应矩阵矩阵
+ * Step 3 八点法计算基础矩阵矩阵
  * Step 4 利用重投影误差为当次RANSAC的结果评分
- * Step 5 更新具有最优评分的单应矩阵计算结果,并且保存所对应的特征点对的内点标记
+ * Step 5 更新具有最优评分的基础矩阵计算结果,并且保存所对应的特征点对的内点标记
  * 
  * @param[in & out] vbMatchesInliers          标记是否是外点
- * @param[in & out] score                     计算单应矩阵的得分
- * @param[in & out] H21                       单应矩阵结果
+ * @param[in & out] score                     计算基础矩阵得分
+ * @param[in & out] F21                       基础矩阵结果
  */
 void FindFundamental(vector<cv::Point2f>& vPts1, vector<cv::Point2f>& vPts2, 
                     vector<bool> &vbMatchesInliers,  vector<vector<size_t> >& vSets, 
