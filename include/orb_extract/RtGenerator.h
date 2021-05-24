@@ -44,7 +44,7 @@ public:
      * @param[in|out] tcw   相机从参考帧到当前帧的平移
      * 
      */
-    void GetRt(cv::Mat ref, cv::Mat curr, cv::Mat Rcw, cv::Mat tcw);
+    void GetRt(cv::Mat ref, cv::Mat curr, cv::Mat& Rcw, cv::Mat& tcw);
 
     /**
      * @brief 使用OpenCV的方式计算FAST
