@@ -34,7 +34,8 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include/orb_extract
     ${PROJECT_SOURCE_DIR}/include/Utils
     ${PROJECT_SOURCE_DIR}/include/localUtils
-    
+    ${PROJECT_SOURCE_DIR}/src/bpvo
+
     ${OpenCV_INCLUDE_DIRS} 
     ${EIGEN3_INCLUDE_DIR}
     ${PCL_INCLUDE_DIRS}
@@ -58,6 +59,7 @@ src/Utils/feature.cc
 src/Utils/algorithm.cc
 src/Utils/ReadData.cc
 src/Utils/PoseSolve.cc
+src/bpvo/ProcessRelative.cpp
 )
 
 
