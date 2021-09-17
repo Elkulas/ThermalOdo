@@ -17,7 +17,10 @@ class BitPlaneDescriptor
     : rows_(other.rows_), cols_(other.cols_), sigma_ct_(other.sigma_ct_)
     , sigma_bp_(other.sigma_bp_), channels_(other.channels_) {}
 
+  // compute
   void compute(cv::Mat&);
+  void ExtractChannel(const cv::Mat& src, cv::Mat& dst, int bit, float sigma);
+  
 
   private:
     int rows_, cols_;
