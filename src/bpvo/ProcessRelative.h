@@ -20,7 +20,8 @@ class BitPlaneDescriptor
   // compute
   void compute(cv::Mat&);
   void ExtractChannel(const cv::Mat& src, cv::Mat& dst, int bit, float sigma);
-  
+  // FFT need
+  void dftShift(cv::Mat& img);
 
   private:
     int rows_, cols_;
