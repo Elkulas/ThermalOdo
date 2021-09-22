@@ -27,6 +27,8 @@ message(STATUS "Eigen3 include path: ${EIGEN3_INCLUDE_DIR}")
 message(STATUS "pcl include dir ${PCL_INCLUDE_DIRS}")
 message(STATUS "pcl VERSION ${PCL_VERSION}")
 
+find_package (gflags REQUIRED)
+
 ######## includes ########
 include_directories( 
     ${PROJECT_SOURCE_DIR}
@@ -40,6 +42,7 @@ include_directories(
     ${EIGEN3_INCLUDE_DIR}
     ${PCL_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
+    ${gflags_INCLUDE_DIR}
 )
 
 
@@ -82,7 +85,7 @@ add_executable(test_pose_solve test/test_pose_solve.cpp)
 target_link_libraries(test_pose_solve ${PROJECT_NAME})
 
 add_executable(test_bit_plane test/test_bit_plane.cpp)
-target_link_libraries(test_bit_plane ${PROJECT_NAME})
+target_link_libraries(test_bit_plane ${PROJECT_NAME} gflags)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

@@ -2,12 +2,17 @@
 #include "thermalodo.h"
 
 #include "ProcessRelative.h"
+#include <gflags/gflags.h>
 
+DEFINE_string(dir, "", "Input pic directory");
 
-int main( int argc, char** argv) {
+int main( int argc, char* argv[]) {
   std::cout << "Hello, That is Bit Plane Test" << std::endl;
 
-  cv::Mat img = cv::imread("/media/jjj/shuaibi/NGC_data/desk_xyz/thermal/1578561468.864967.png", cv::IMREAD_GRAYSCALE);
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  cout << "dir = " << FLAGS_dir << endl;
+
+  cv::Mat img = cv::imread(FLAGS_dir, cv::IMREAD_GRAYSCALE);
 
   if(img.empty()) {
     printf("failed to read image\n");
