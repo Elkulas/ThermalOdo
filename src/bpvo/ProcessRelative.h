@@ -22,6 +22,7 @@ class BitPlaneDescriptor
   void ExtractChannel(const cv::Mat& src, cv::Mat& dst, int bit, float sigma);
   // FFT need
   void dftShift(cv::Mat& img);
+  void showSpectrum(cv::Mat& spectrum, std::string title, bool inverse);
 
   private:
     int rows_, cols_;

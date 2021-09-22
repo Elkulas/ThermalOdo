@@ -27,26 +27,14 @@ void BitPlaneDescriptor::compute(cv::Mat& I) {
 
   // DFT test
   cv::Mat src_proc;
-  lbp_.convertTo(src_proc, CV_64FC1);
-  cv::Mat spectrum(lbp_.size(), CV_64FC2);
+  I.convertTo(src_proc, CV_64FC1);
+  cv::Mat spectrum(I.size(), CV_64FC2);
 
   cv::dft(src_proc, spectrum, cv::DFT_COMPLEX_OUTPUT, 0);
   // shift
   dftShift(spectrum);
  
-  cv::Mat out_mag;
-  // split channel
-  cv::Mat mag_channel[2];
-  cv::split(spectrum, mag_channel);
-  cv::magnitude(mag_channel[0], mag_channel[1], out_mag);
-  // inverse
-  out_mag += cv::Scalar::all(1);
-  cv::log(out_mag, out_mag);
-  cv::normalize(out_mag, out_mag, 0, 255, cv::NORM_MINMAX);
-  out_mag.convertTo(out_mag, CV_8UC1);
-  cv::imshow("heloojho", out_mag);
-  cv::imwrite("/home/jjj/NGCLAB/ThermalOdo/bin/test.png", out_mag);
-  cv::waitKey();
+  showSpectrum(spectrum, "origin dft", false);
 
   // DFT test
 
@@ -151,6 +139,24 @@ void BitPlaneDescriptor::dftShift(cv::Mat& img){
   q2.copyTo(q1);
   tmp.copyTo(q2);
 }
+
+void BitPlaneDescriptor::showSpectrum(cv::Mat& spectrum, std::string title, bool inverse){
+  cv::Mat out_mag;
+  // split channel
+  cv::Mat mag_channel[2];
+  cv::split(spectrum, mag_channel);
+  cv::magnitude(mag_channel[0], mag_channel[1], out_mag);
+  // inverse
+  if(!inverse){
+    out_mag += cv::Scalar::all(1);
+    cv::log(out_mag, out_mag);
+  }
+  cv::normalize(out_mag, out_mag, 0, 255, cv::NORM_MINMAX);
+  out_mag.convertTo(out_mag, CV_8UC1);
+  cv::imshow(title, out_mag);
+  cv::waitKey();
+}
+
 
 
 
