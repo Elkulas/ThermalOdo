@@ -3,14 +3,20 @@
 
 #include "ProcessRelative.h"
 #include <gflags/gflags.h>
+#include <glog/logging.h>
 
 DEFINE_string(dir, "", "Input pic directory");
+DEFINE_string(log_dir, "/home/jjj/NGCLAB/ThermalOdo/bin/log", "Log dir");
 
 int main( int argc, char* argv[]) {
   std::cout << "Hello, That is Bit Plane Test" << std::endl;
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
-  cout << "dir = " << FLAGS_dir << endl;
+  cout << "Image dir = " << FLAGS_dir << endl;
+
+  google::InitGoogleLogging(argv[0]);
+
+  LOG(INFO) << "Hello, World!";
 
   cv::Mat img = cv::imread(FLAGS_dir, cv::IMREAD_GRAYSCALE);
 
