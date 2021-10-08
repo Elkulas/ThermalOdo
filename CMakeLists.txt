@@ -89,6 +89,9 @@ target_link_libraries(test_pose_solve ${PROJECT_NAME})
 add_executable(test_bit_plane test/test_bit_plane.cpp)
 target_link_libraries(test_bit_plane ${PROJECT_NAME} gflags glog)
 
+add_executable(test_dft test/test_dft.cpp)
+target_link_libraries(test_dft ${PROJECT_NAME})
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
