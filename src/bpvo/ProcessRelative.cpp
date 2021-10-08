@@ -36,8 +36,87 @@ void BitPlaneDescriptor::compute(cv::Mat& I) {
  
   showSpectrum(spectrum, "origin dft", false);
 
-  // DFT test
+  notchFilter(spectrum, 176, 240, 0);
+  notchFilter(spectrum, 176, 241, 0);
+  notchFilter(spectrum, 174, 238, 0);
+  notchFilter(spectrum, 464, 240, 0);
+  notchFilter(spectrum, 463, 238, 0);
+  notchFilter(spectrum, 465, 240, 0);
+  notchFilter(spectrum, 465, 107, 0);
+  notchFilter(spectrum, 465, 109, 0);
+  notchFilter(spectrum, 175, 373, 0);
+  notchFilter(spectrum, 175, 371, 0);
+  // for(int i = 174; i < 179; i++){
+  //   for(int j = 238; j < 242; j++){
+  //   notchFilter(spectrum, i, j, 0);
+  //   }
+  // }
 
+  cv::Mat temp[2];
+  cv::split(spectrum, temp);
+  for(int i = 174; i < 179; i++){
+    for(int j = 238; j < 242; j++){
+    notchFilter(temp[0], i, j, 0);
+    notchFilter(temp[1], i, j, 0);
+    }
+  }
+  cv::Mat filtered;
+  cv::merge(temp, 2, filtered);
+  showSpectrum(filtered, "filtered dft", false);
+  
+  cout << spectrum.type()<<endl;
+
+  showSpectrum(spectrum, "filtered dft", false);
+
+
+  // BHPF
+  {
+    cv::Mat bhpf_filter;
+    makeBHPF(spectrum.cols, spectrum.rows, 30, 2, bhpf_filter);
+    cv::Mat complex[2];
+    cv::Mat temp[2];
+    cv::split(spectrum, complex);
+    cv::multiply(complex[0], bhpf_filter, temp[0], 1.0, 6);
+    cv::multiply(complex[1], bhpf_filter, temp[1], 1.0, 6);
+    cv::Mat idft, iout;
+    cv::merge(temp, 2, idft);
+    showSpectrum(idft, "bhpf dft", false);
+    cv::dft(idft, iout, cv::DFT_INVERSE);
+    showSpectrum(iout, "bhpf", true);
+    dftShift(idft);
+    cv::dft(idft, iout, cv::DFT_INVERSE | cv::DFT_REAL_OUTPUT | cv::DFT_SCALE);
+    cv::imshow("bhpf2", iout);
+    cv::waitKey();
+  }
+
+  // BIPF
+  {
+    cv::Mat bipf_filter;
+    makeBIPF(spectrum.cols, spectrum.rows, 60, 20, bipf_filter);
+    cv::Mat complex[2];
+    cv::Mat temp[2];
+    cv::split(spectrum, complex);
+    cv::multiply(complex[0], bipf_filter, temp[0], 1.0, 6);
+    cv::multiply(complex[1], bipf_filter, temp[1], 1.0, 6);
+    cv::Mat idft, iout;
+    cv::merge(temp, 2, idft);
+    showSpectrum(idft, "bipf dft", false);
+    cv::dft(idft, iout, cv::DFT_INVERSE);
+    showSpectrum(iout, "bipf", true);
+    dftShift(idft);
+    cv::dft(idft, iout, cv::DFT_INVERSE | cv::DFT_REAL_OUTPUT | cv::DFT_SCALE);
+    cv::imshow("bipf2", iout);
+    cv::waitKey();
+  }
+
+  // ftDFT test
+  cv::Mat dtft_mat;
+  cv::dft(spectrum, dtft_mat, cv::DFT_INVERSE);
+  
+  //dtfft
+  showSpectrum(dtft_mat, "origin dft2", false);
+
+  cv::waitKey();
   // Step 2: Get 8 channel images
 
   cv::Mat out0;
@@ -45,61 +124,6 @@ void BitPlaneDescriptor::compute(cv::Mat& I) {
   std::cout << "Num: 0" << std::endl;
   cv::imshow("lbp0", out0);
   cv::waitKey();
-
-  cv::Mat out;
-  ExtractChannel(lbp_, out, 1, sigma_bp_);
-  std::cout << "TYPE: " << out.type() << std::endl;
-  std::cout << "Num: 1" << std::endl;
-  cv::imshow("lbp2", out);
-  cv::waitKey();
-
-  cv::Mat out2;
-  ExtractChannel(lbp_, out2, 2, sigma_bp_);
-  std::cout << "Num: 2" << std::endl;
-  cv::imshow("lbp4", out2);
-  cv::waitKey();
-
-  cv::Mat out3;
-  ExtractChannel(lbp_, out3, 3, sigma_bp_);
-  std::cout << "Num: 3" << std::endl;
-  cv::imshow("lbp3", out3);
-  cv::waitKey();
-
-  cv::Mat out4;
-  ExtractChannel(lbp_, out4, 4, sigma_bp_);
-  std::cout << "Num: 4" << std::endl;
-  cv::imshow("lbp5", out4);
-  cv::waitKey();
-
-  cv::Mat out5;
-  ExtractChannel(lbp_, out5, 5, sigma_bp_);
-  std::cout << "Num: 5" << std::endl;
-  cv::imshow("lbp6", out5);
-  cv::waitKey();
-
-  cv::Mat out6;
-  ExtractChannel(lbp_, out6, 6, sigma_bp_);
-  std::cout << "Num: 6" << std::endl;
-  cv::imshow("lbp7", out6);
-  cv::waitKey();
-
-  cv::Mat out7;
-  ExtractChannel(lbp_, out7, 7, sigma_bp_);
-  std::cout << "Num: 7" << std::endl;
-  cv::imshow("lbp8", out7);
-  cv::waitKey();
-
-
-  // loop
-  // for(int b = 0; b < 8; b++) {
-  //   cv::Mat out1;
-  //   std::cout << "B: " << b << std::endl;
-  //   ExtractChannel(lbp_, out1, b, 0.0f);
-  //   cv::imshow("lbp3", out1);
-  //   cv::waitKey();
-  // }
-
-
 
 }
 
@@ -154,9 +178,56 @@ void BitPlaneDescriptor::showSpectrum(cv::Mat& spectrum, std::string title, bool
   cv::normalize(out_mag, out_mag, 0, 255, cv::NORM_MINMAX);
   out_mag.convertTo(out_mag, CV_8UC1);
   cv::imshow(title, out_mag);
+  std::string outpath = "/home/jjj/NGCLAB/ThermalOdo/bin/reslut/";
+  std::string output = "";
+  output = outpath + "/" + title + ".png";
+  cv::imwrite(output, out_mag);
   cv::waitKey();
+  // cv::Mat lbp;
+  // getOriginLBPFeature(out_mag, lbp);
+  // cv::imshow(title, lbp);
+  // cv::waitKey();
 }
 
+void BitPlaneDescriptor::makeBHPF(int width, int height, double D0, double n, cv::Mat& dst){
+  dst = cv::Mat::ones(Size(width, height), CV_32F);
+	double D0_2 = pow(D0, 2);
+	double half_h = height * (1.0) / 2;
+	double half_w = width * (1.0) / 2;
+	//创建理想高通滤波器
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			double distance = pow((half_h - (double)i), 2) + pow((half_w - (double)j), 2);
+			double temp = pow(D0 / sqrt(distance), 2 * n);
+			dst.at<float>(i, j) = 1.0 / (1.0 + temp);
+		}
+	}
+}
+
+void BitPlaneDescriptor::makeBIPF(int width, int height, double D0, double n, cv::Mat& dst){
+  dst = cv::Mat::ones(Size(width, height), CV_32F);
+	double D0_2 = pow(D0, 2);
+	double half_h = height * (1.0) / 2;
+	double half_w = width * (1.0) / 2;
+	//布特沃斯低通滤波器
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			double distance = pow((half_h - (double)i), 2) + pow((half_w - (double)j), 2);
+			double temp = pow(sqrt(distance)/D0, 2 * n);
+			dst.at<float>(i, j) = 1.0 / (1.0 + temp);
+		}
+	}
+}
+
+void BitPlaneDescriptor::notchFilter(cv::Mat& spectrum, int x, int y, int value){
+  cv::Vec2d* pf = spectrum.ptr<cv::Vec2d>(y);
+  cout << "Cout! " << pf[x][0] << endl;
+  pf[x][0] = value;
+}
 
 
 

@@ -23,6 +23,12 @@ class BitPlaneDescriptor
   // FFT need
   void dftShift(cv::Mat& img);
   void showSpectrum(cv::Mat& spectrum, std::string title, bool inverse);
+  // DFT filter
+  // 布特沃斯滤波器
+  void makeBHPF(int width, int height, double D0, double n, cv::Mat& dst);
+  void makeBIPF(int width, int height, double D0, double n, cv::Mat& dst);
+  // 陷波滤波
+  void notchFilter(cv::Mat& spectrum, int x, int y, int value);
 
   private:
     int rows_, cols_;
