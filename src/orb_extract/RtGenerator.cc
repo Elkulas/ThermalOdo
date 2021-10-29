@@ -35,7 +35,7 @@ RtGenerator::RtGenerator(int _nfeatures, float _scaleFactor, int _nlevels, int _
  * @param[in|out] tcw   相机从参考帧到当前帧的平移
  * 
  */
-void RtGenerator::GetRt(cv::Mat ref, cv::Mat curr, cv::Mat Rcw, cv::Mat tcw)
+void RtGenerator::GetRt(cv::Mat ref, cv::Mat curr, cv::Mat& Rcw, cv::Mat& tcw)
 {
     // ORB提取参数
     int nFeatures = nfeatures;
@@ -52,6 +52,12 @@ void RtGenerator::GetRt(cv::Mat ref, cv::Mat curr, cv::Mat Rcw, cv::Mat tcw)
     // 提取特征点
     ORBref.operator()(ref, cv::Mat(), ORBref.mvKeysUn, ORBref.mDescriptors);
     ORBcurr.operator()(curr, cv::Mat(), ORBcurr.mvKeysUn, ORBcurr.mDescriptors);
+
+    cv::Mat out;
+    ref.copyTo(out);
+    cv::drawKeypoints(out, ORBref.mvKeysUn, out);
+    cv::imshow("hi", out);
+    cv::waitKey();
 
     // 获取提取的点的数目
     ORBref.N = ORBref.mvKeysUn.size();
@@ -98,8 +104,23 @@ void RtGenerator::GetRt(cv::Mat ref, cv::Mat curr, cv::Mat Rcw, cv::Mat tcw)
 
     // = = = = = = = = = = = = = 计算H和F并解算旋转与平移 = = = = = = = = = = = = = 
     vector<bool> vbTriangulated;
+
+    cout << "check " << Matches12.size()  << ":che:   " << nmatches << endl;
+
     if(matcher.Initialize(ORBref, ORBcurr, Matches12, Rcw, tcw, matcher.mvIniP3D, vbTriangulated, mK, 1.0, 200))
         cout << "Calculating Rt Over!" << endl;
+    // test, 将作图画出来
+    cv::Mat img_test;
+    curr.copyTo(img_test);
+    cv::cvtColor(curr, img_test, cv::COLOR_GRAY2BGR);
+
+    for(int i = 0; i < matcher.mvMatches12.size(); i++)
+    {
+        cv::circle(img_test, ORBcurr.mvKeysUn[matcher.mvMatches12[i].second].pt, 2, cv::Scalar(0, 250, 0), 2);
+        cv::line(img_test, ORBref.mvKeysUn[matcher.mvMatches12[i].first].pt, ORBcurr.mvKeysUn[matcher.mvMatches12[i].second].pt, cv::Scalar(0, 250, 0));
+    }
+    cv::imshow("shiwe", img_test);
+    cv::waitKey();
     cout << "R: " << endl << Rcw << endl;
     cout << "t: " << endl << tcw << endl;
     

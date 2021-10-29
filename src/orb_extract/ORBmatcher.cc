@@ -418,11 +418,11 @@ bool ORBmatcher::Initialize(ORBextractor &ReferenceFrame, ORBextractor &CurrentF
 
     // Try to reconstruct from homography or fundamental depending on the ratio (0.40-0.45)
     // 注意这里更倾向于用H矩阵恢复位姿。如果单应矩阵的评分占比达到了0.4以上,则从单应矩阵恢复运动,否则从基础矩阵恢复运动
-    if(RH>0.40)
-        //更偏向于平面，此时从单应矩阵恢复，函数ReconstructH返回bool型结果
-        return ReconstructH(vbMatchesInliersH,H,mK,R21,t21,vP3D,vbTriangulated,1.0,50);
-    else //if(pF_HF>0.6)
-        // 更偏向于非平面，从基础矩阵恢复
+    // if(RH>0.40)
+    //     //更偏向于平面，此时从单应矩阵恢复，函数ReconstructH返回bool型结果
+    //     return ReconstructH(vbMatchesInliersH,H,mK,R21,t21,vP3D,vbTriangulated,1.0,50);
+    // else //if(pF_HF>0.6)
+    //     // 更偏向于非平面，从基础矩阵恢复
         return ReconstructF(vbMatchesInliersF,F,mK,R21,t21,vP3D,vbTriangulated,1.0,50);
 
     // 执行到这里说明跑飞了

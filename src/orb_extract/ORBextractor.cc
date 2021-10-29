@@ -1307,7 +1307,7 @@ void ORBextractor::operator()( InputArray _image, InputArray _mask, vector<KeyPo
 { 
     // 判断图像类型
     // CV8UC3
-    if(_image.type() == 16) mTypeFlag = 1;
+    if(_image.type() == 16 || _image.type() == 0) mTypeFlag = 1;
     // CV16UC1
     if(_image.type() == 2) mTypeFlag = 0;
     
