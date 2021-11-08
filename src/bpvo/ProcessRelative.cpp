@@ -34,18 +34,8 @@ void BitPlaneDescriptor::compute(cv::Mat& I) {
   // shift
   dftShift(spectrum);
  
-  showSpectrum(spectrum, "origin dft", false);
+  showSpectrum(spectrum, "origin dft", true);
 
-  notchFilter(spectrum, 176, 240, 0);
-  notchFilter(spectrum, 176, 241, 0);
-  notchFilter(spectrum, 174, 238, 0);
-  notchFilter(spectrum, 464, 240, 0);
-  notchFilter(spectrum, 463, 238, 0);
-  notchFilter(spectrum, 465, 240, 0);
-  notchFilter(spectrum, 465, 107, 0);
-  notchFilter(spectrum, 465, 109, 0);
-  notchFilter(spectrum, 175, 373, 0);
-  notchFilter(spectrum, 175, 371, 0);
   // for(int i = 174; i < 179; i++){
   //   for(int j = 238; j < 242; j++){
   //   notchFilter(spectrum, i, j, 0);
