@@ -39,6 +39,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/include/Utils
     ${PROJECT_SOURCE_DIR}/include/localUtils
     ${PROJECT_SOURCE_DIR}/src/bpvo
+    ${PROJECT_SOURCE_DIR}/src/dso_front/include
 
     ${OpenCV_INCLUDE_DIRS} 
     ${EIGEN3_INCLUDE_DIR}
@@ -47,6 +48,10 @@ include_directories(
     ${gflags_INCLUDE_DIR}
 )
 
+####### subs ######
+add_subdirectory(src/dso_front/PixelGradient_src)
+add_subdirectory(src/dso_front/PixelSelector_src)
+add_subdirectory(src/dso_front/Utils)
 
 ######## libs ########
 
@@ -91,6 +96,18 @@ target_link_libraries(test_bit_plane ${PROJECT_NAME} gflags glog)
 
 add_executable(test_dft test/test_dft.cpp)
 target_link_libraries(test_dft ${PROJECT_NAME})
+
+add_executable(test_dso_front test/test_dso_front.cpp)
+target_link_libraries(
+    test_dso_front
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}_PixelGradient
+    ${PROJECT_NAME}_PixelSelector
+    ${PROJECT_NAME}_Utils
+    gflags
+    glog
+)
+
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
