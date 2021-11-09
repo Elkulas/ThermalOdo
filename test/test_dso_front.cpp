@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
 
   // detect
   int num = ps->makeMaps(pixelGradent_, statusMap, 1, true, 2);
-  
+  // detect ends
   std::cout << "Get Point number'\t'" << num << std::endl;
   cv::waitKey();
 
