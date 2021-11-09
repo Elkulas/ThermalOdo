@@ -14,27 +14,24 @@
 
 using namespace cv;
 using namespace std;
-typedef PixelGradient FrameHessian;
-
-
 class PixelSelector
 {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   int makeMaps(
-      const FrameHessian* const fh,
+      const PixelGradient* const fh,
       float* map_out, float density, int recursionsLeft=1, bool plot=false, float thFactor=1);
 
-  PixelSelector(int w, int h);
+  PixelSelector(const cv::Mat image);
   ~PixelSelector();
   int currentPotential; 		//!< 当前选择像素点的潜力, 就是网格大小, 越大选点越少
 
 
   bool allowFast;
-  void makeHists(const FrameHessian* const fh);
+  void makeHists();
  private:
 
-  Eigen::Vector3i select(const FrameHessian* const fh,
+  Eigen::Vector3i select(const PixelGradient* const fh,
                          float* map_out, int pot, float thFactor=1);
 
 
@@ -45,7 +42,7 @@ class PixelSelector
   float* ths;					//!< 平滑之前的阈值
   float* thsSmoothed;			//!< 平滑后的阈值
   int thsStep;
-  const FrameHessian* gradHistFrame;
+  PixelGradient* gradHistFrame;
 };
 
 

@@ -33,17 +33,17 @@ int main(int argc, char* argv[]){
 
   cv::waitKey();
 
-  PixelSelector sel(pixelGradent_->wG[0],pixelGradent_->hG[0]);
+  PixelSelector sel(img0);
 
   float *statusMap = new float[pixelGradent_->wG[0] * pixelGradent_->hG[0]];
 
   float den = 0.001;
-  float densities[] = {den,den * 2,den * 4 ,0.5,1}; // 不同层取得点密度
+  // float densities[] = {den,den * 2,den * 4 ,0.5,1}; // 不同层取得点密度
   sel.currentPotential = 5; // 设置网格大小，3*3大小格
   int *w = &pixelGradent_->wG[0];
   int *h = &pixelGradent_->hG[0];
 
-  int numpts = sel.makeMaps(pixelGradent_, statusMap, densities[0] * w[0] * h[0], 1, true, 2);
+  int numpts = sel.makeMaps(pixelGradent_, statusMap, den * w[0] * h[0], 1, true, 2);
 
   cv::Mat output;
   img0.copyTo(output);

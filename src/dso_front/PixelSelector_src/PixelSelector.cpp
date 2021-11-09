@@ -44,7 +44,7 @@ int computeHistQuantil(int* hist, float below)
 
 //* 生成梯度直方图, 为每个block计算阈值
 // 输出得到一个hist以及一个ths以及
-void PixelSelector::makeHists(const FrameHessian* const fh)
+void PixelSelector::makeHists(const PixelGradient* const fh)
 {
   gradHistFrame = fh;
   // 第0层梯度平方和的指针
@@ -165,7 +165,7 @@ void PixelSelector::makeHists(const FrameHessian* const fh)
  * @ note:		使用递归
  *******************************/
 int PixelSelector::makeMaps(
-    const FrameHessian *const fh,
+    const PixelGradient *const fh,
     float *map_out, float density, int recursionsLeft, bool plot, float thFactor) {
 
   float numHave = 0;
@@ -349,7 +349,7 @@ int PixelSelector::makeMaps(
  *
  * @ note:			返回的是每一层选择的点的个数
  *******************************/
- Eigen::Vector3i PixelSelector::select(const FrameHessian* const fh,
+ Eigen::Vector3i PixelSelector::select(const PixelGradient* const fh,
                                        float* map_out, int pot, float thFactor)
  {
    //const 在*左, 指针内容不可改, 在*右指针不可改
