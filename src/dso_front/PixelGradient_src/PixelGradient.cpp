@@ -1,5 +1,5 @@
 //
-// Created by Eku on 21-10-14.
+// updated by jiang 21/11/09
 //
 #include "PixelGradient.h"
 #include "Utils.h"
@@ -12,7 +12,7 @@ PixelGradient::PixelGradient() {
 PixelGradient::~PixelGradient() {
 }
 
-void PixelGradient::computeGradents(const Mat img, Mat &gradents, int level)
+void PixelGradient::computeGradents(const Mat img, int level)
 {
   // 初始的长宽
   int w = img.cols;
@@ -113,15 +113,6 @@ void PixelGradient::computeGradents(const Mat img, Mat &gradents, int level)
   int wl = wG[level], hl = hG[level]; // 该层图像大小
   Eigen::Vector3f *dI_l = dIp[level];
   float *dabs_l = absSquaredGrad[level];
-  gradents = cv::Mat(hl, wl, IMREAD_GRAYSCALE);
-
-  double maxinm = 0.0;
-  double mininm = 0.0;
-
-  toCvMat(dabs_l, gradents);
-
-  cv::minMaxIdx(gradents, &mininm, &maxinm);
-  std::cout << "Graden " << mininm << " " << maxinm << std::endl;
 
 }
 

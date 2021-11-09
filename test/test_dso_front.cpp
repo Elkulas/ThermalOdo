@@ -24,42 +24,33 @@ int main(int argc, char* argv[]){
 
   Mat img0 = imread(FLAGS_dir, -1);
 
+  // detect points
   PixelGradient *pixelGradent_ = new PixelGradient;
-  cv::Mat gradent_0;
-//  cv::Mat gradent_1;
-  pixelGradent_->computeGradents(img0, gradent_0);
+  pixelGradent_->computeGradents(img0);
 
-  imshow("gradent", gradent_0);
+  PixelSelector::Ptr ps(new PixelSelector(img0.cols, img0.rows, 0.001, 5));
 
+  float *statusMap = new float[img0.cols * img0.cols];
+
+  // detect
+  int num = ps->makeMaps(pixelGradent_, statusMap, 1, true, 2);
+  
+  std::cout << "Get Point number'\t'" << num << std::endl;
   cv::waitKey();
-
-  PixelSelector sel(img0);
-
-  float *statusMap = new float[pixelGradent_->wG[0] * pixelGradent_->hG[0]];
-
-  float den = 0.001;
-  // float densities[] = {den,den * 2,den * 4 ,0.5,1}; // 不同层取得点密度
-  sel.currentPotential = 5; // 设置网格大小，3*3大小格
-  int *w = &pixelGradent_->wG[0];
-  int *h = &pixelGradent_->hG[0];
-
-  int numpts = sel.makeMaps(pixelGradent_, statusMap, den * w[0] * h[0], 1, true, 2);
 
   cv::Mat output;
   img0.copyTo(output);
   cv::cvtColor(output, output, cv::COLOR_GRAY2RGB);
 
   // traverse points
-  for (int y = patternPadding + 1; y < pixelGradent_->hG[0] - patternPadding - 2; y++)
-      for (int x = patternPadding + 1; x < pixelGradent_->wG[0] - patternPadding - 2; x++) {
-        if(statusMap[x + y * pixelGradent_->wG[0]] != 0){
+  for (int y = patternPadding + 1; y < img0.rows - patternPadding - 2; y++)
+      for (int x = patternPadding + 1; x < img0.cols - patternPadding - 2; x++) {
+        if(statusMap[x + y * img0.cols] != 0){
           cv::circle(output, cv::Point(x, y), 3, cv::Scalar(0, 255, 0), 1);
         }
   }
 
-  cv::imshow("Hello23", output);
-
-  cv::waitKey();
+  cv::imshow("output", output);
 
   cv::waitKey();
 

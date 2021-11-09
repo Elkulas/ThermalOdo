@@ -1,17 +1,29 @@
 //
-// Created by lab on 20-3-25.
+// updated by jiang 21/11/09
 //
 
 #include "PixelSelector.h"
 #include "Utils.h"
 
-PixelSelector::PixelSelector(int w, int h)
+
+/********************************
+ * @ function:  构造函数
+ *
+ * @ param: 
+ *        w           输入图像width
+ * @			h           输入图像height
+ * @			density		 	提点密度
+ * @			potential	  取点的方格范围,越大提取点数目越小
+ * 
+ * @ note:  构造函数
+ *******************************/
+PixelSelector::PixelSelector(int w, int h, float density, int potential)
 {
   randomPattern = new unsigned char[w*h];
   std::srand(3141592);	// want to be deterministic.
   for(int i=0;i<w*h;i++) randomPattern[i] = rand() & 0xFF; // 随机数, 取低8位
 
-  currentPotential=3;
+  currentPotential = potential;
 
   // 32*32个块进行计算阈值
   gradHist = new int[100*(1+w/32)*(1+h/32)];
@@ -19,6 +31,7 @@ PixelSelector::PixelSelector(int w, int h)
   thsSmoothed = new float[(w/32)*(h/32)+100];
 
   allowFast=false;
+  den = density;
   gradHistFrame=0;
 }
 
@@ -152,6 +165,8 @@ void PixelSelector::makeHists(const PixelGradient* const fh)
     }
 }
 
+
+
 /********************************
  * @ function:
  *
@@ -166,10 +181,10 @@ void PixelSelector::makeHists(const PixelGradient* const fh)
  *******************************/
 int PixelSelector::makeMaps(
     const PixelGradient *const fh,
-    float *map_out, float density, int recursionsLeft, bool plot, float thFactor) {
+    float *map_out, int recursionsLeft, bool plot, float thFactor) {
 
   float numHave = 0;
-  float numWant = density;
+  float numWant = den * fh->wG[0] * fh->hG[0];
   float quotia;
   int idealPotential = currentPotential;
   std::cout << "Initial currentPotential\t" << currentPotential << std::endl;
@@ -236,7 +251,7 @@ int PixelSelector::makeMaps(
       currentPotential = idealPotential;
       std::cout << "currentPotential\t" << currentPotential << std::endl;
 
-      return makeMaps(fh, map_out, density, recursionsLeft - 1, plot, thFactor); //递归
+      return makeMaps(fh, map_out, recursionsLeft - 1, plot, thFactor); //递归
     } else if (recursionsLeft > 0 && quotia < 0.25) {
       // re-sample to get less points!
 
@@ -249,7 +264,7 @@ int PixelSelector::makeMaps(
       //				currentPotential,
       //				idealPotential);
       currentPotential = idealPotential;
-      return makeMaps(fh, map_out, density, recursionsLeft - 1, plot, thFactor);
+      return makeMaps(fh, map_out, recursionsLeft - 1, plot, thFactor);
 
     }
   }

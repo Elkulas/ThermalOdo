@@ -1,9 +1,9 @@
 //
-// Created by lab on 20-3-24.
+// updated by jiang 21/11/09
 //
 
-#ifndef DSO_MODULES_PIXELGRADENT_H
-#define DSO_MODULES_PIXELGRADENT_H
+#ifndef _PIXELGRADENT_H
+#define _PIXELGRADENT_H
 #include <Eigen/Core>
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -29,7 +29,7 @@ class PixelGradient
   int hG[PYR_LEVELS];
   int pyrLevelsUsed;
 
-  void computeGradents(const Mat img, Mat &gradents, int level = 1);
+  void computeGradents(const Mat img, int level = 1);
   void computeGradentsFor16(const Mat img, Mat &gradents, int level = 1);
  private:
 

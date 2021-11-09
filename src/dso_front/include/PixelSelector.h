@@ -1,9 +1,9 @@
 //
-// Created by lab on 20-3-25.
+// updated by jiang 21/11/09
 //
 
-#ifndef DSO_MODULES_PIXELSELECTOR_H
-#define DSO_MODULES_PIXELSELECTOR_H
+#ifndef _PIXELSELECTOR_H
+#define _PIXELSELECTOR_H
 #include <Eigen/Core>
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -14,37 +14,36 @@
 
 using namespace cv;
 using namespace std;
+
 class PixelSelector
 {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
-  int makeMaps(
-      const PixelGradient* const fh,
-      float* map_out, float density, int recursionsLeft=1, bool plot=false, float thFactor=1);
+  typedef std::shared_ptr<PixelSelector> Ptr;
 
-  PixelSelector(const cv::Mat image);
+  PixelSelector(int w, int h, float density = 0.001f, int potential = 5);
   ~PixelSelector();
   int currentPotential; 		//!< 当前选择像素点的潜力, 就是网格大小, 越大选点越少
-
+  float den;
 
   bool allowFast;
-  void makeHists();
- private:
+  void makeHists(const PixelGradient* const fh);
+  int makeMaps(
+      const PixelGradient* const fh,
+      float* map_out, int recursionsLeft=1, bool plot=false, float thFactor=1);
 
+ private:
   Eigen::Vector3i select(const PixelGradient* const fh,
                          float* map_out, int pot, float thFactor=1);
 
-
   unsigned char* randomPattern;
-
-
   int* gradHist;  			//!< 根号梯度平方和分布直方图, 0是所有像素个数
   float* ths;					//!< 平滑之前的阈值
   float* thsSmoothed;			//!< 平滑后的阈值
   int thsStep;
-  PixelGradient* gradHistFrame;
+  const PixelGradient* gradHistFrame;
+  PixelGradient* pixelGradent_;
 };
-
 
 //########### TODO to select good point
 
