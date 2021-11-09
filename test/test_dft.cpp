@@ -264,8 +264,8 @@ void on_MouseHandle(int event, int x, int y, int falgs, void* param)
 
         if( g_rectangle.height > 0 && g_rectangle.width > 0 ){
             Mat imageROI = image(g_rectangle).clone();
-            double  min, max;
-            cv::Point   min_loc, max_loc;
+            double min, max;
+            cv::Point min_loc, max_loc;
             cv::minMaxLoc( imageROI, &min, &max, &min_loc, &max_loc);
             cv::circle(imageROI, max_loc, 10, 1);
             max_loc.x += g_rectangle.x;
