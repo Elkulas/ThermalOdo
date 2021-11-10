@@ -49,9 +49,7 @@ include_directories(
 )
 
 ####### subs ######
-add_subdirectory(src/dso_front/PixelGradient_src)
-add_subdirectory(src/dso_front/PixelSelector_src)
-add_subdirectory(src/dso_front/Utils)
+add_subdirectory(src/dso_front)
 
 ######## libs ########
 
@@ -101,9 +99,7 @@ add_executable(test_dso_front test/test_dso_front.cpp)
 target_link_libraries(
     test_dso_front
     ${PROJECT_NAME}
-    ${PROJECT_NAME}_PixelGradient
-    ${PROJECT_NAME}_PixelSelector
-    ${PROJECT_NAME}_Utils
+    ${PROJECT_NAME}_dso
     gflags
     glog
 )

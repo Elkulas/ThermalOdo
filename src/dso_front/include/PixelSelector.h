@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 #include "PixelGradient.h"
 #include "Utils.h"
 
