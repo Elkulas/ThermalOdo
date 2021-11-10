@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  Mat img0 = imread(FLAGS_dir, -1);
+  Mat img0 = imread(FLAGS_dir, 0);
 
   // detect points
   PixelGradient *pixelGradent_ = new PixelGradient;
