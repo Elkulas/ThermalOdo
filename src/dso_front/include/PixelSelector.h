@@ -22,10 +22,10 @@ class PixelSelector
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
   typedef std::shared_ptr<PixelSelector> Ptr;
 
-  PixelSelector(int w, int h, float density = 0.001f, int potential = 5);
+  PixelSelector(int w, int h, int num = 300, int potential = 5);
   ~PixelSelector();
   int currentPotential; 		//!< 当前选择像素点的潜力, 就是网格大小, 越大选点越少
-  float den;
+  int wantedNum;      // 当前选取点的数量
 
   bool allowFast;
   void makeHists(const PixelGradient* const fh);

@@ -12,12 +12,12 @@
  * @ param: 
  *        w           输入图像width
  * @			h           输入图像height
- * @			density		 	提点密度
+ * @			num		    	提点数量
  * @			potential	  取点的方格范围,越大提取点数目越小
  * 
  * @ note:  构造函数
  *******************************/
-PixelSelector::PixelSelector(int w, int h, float density, int potential)
+PixelSelector::PixelSelector(int w, int h, int num, int potential)
 {
   randomPattern = new unsigned char[w*h];
   std::srand(3141592);	// want to be deterministic.
@@ -31,7 +31,7 @@ PixelSelector::PixelSelector(int w, int h, float density, int potential)
   thsSmoothed = new float[(w/32)*(h/32)+100];
 
   allowFast=false;
-  den = density;
+  wantedNum = num;
   gradHistFrame=0;
 }
 
@@ -72,19 +72,6 @@ void PixelSelector::makeHists(const PixelGradient* const fh)
   int w32 = w/32;
   int h32 = h/32;
   thsStep = w32;
-
-  std::cout << "hw " << w32 << h32 << std::endl;
-
-
-  //*******************************
-  int level = 0;
-  cv::Mat gradents = cv::Mat(fh->hG[level], fh->wG[level], cv::IMREAD_GRAYSCALE);
-  toCvMat(fh->absSquaredGrad[level], gradents);
-  //*******************************
-//  int gridSize = 32;
-//  cv::Mat gradents = cv::Mat(gridSize, gridSize, CV_LOAD_IMAGE_GRAYSCALE);
-//  toCvMat_c(fh->absSquaredGrad[0], gradents);
-//  float *grids = new float[gridSize * gridSize];
 
   // 遍历格子
   for(int y=0;y<h32;y++)
@@ -184,7 +171,7 @@ int PixelSelector::makeMaps(
     float *map_out, int recursionsLeft, bool plot, float thFactor) {
 
   float numHave = 0;
-  float numWant = den * fh->wG[0] * fh->hG[0];
+  float numWant = wantedNum;
   float quotia;
   int idealPotential = currentPotential;
   std::cout << "Initial currentPotential\t" << currentPotential << std::endl;

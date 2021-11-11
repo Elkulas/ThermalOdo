@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
   PixelGradient *pixelGradent_ = new PixelGradient;
   pixelGradent_->computeGradents(img0);
 
-  PixelSelector::Ptr ps(new PixelSelector(img0.cols, img0.rows, 0.001, 5));
+  PixelSelector::Ptr ps(new PixelSelector(img0.cols, img0.rows, 150, 5));
 
   float *statusMap = new float[img0.cols * img0.cols];
 
