@@ -174,7 +174,7 @@ int PixelSelector::makeMaps(
   float numWant = wantedNum;
   float quotia;
   int idealPotential = currentPotential;
-  std::cout << "Initial currentPotential\t" << currentPotential << std::endl;
+  // std::cout << "Initial currentPotential\t" << currentPotential << std::endl;
 
 
 
@@ -213,19 +213,19 @@ int PixelSelector::makeMaps(
     //[ ***step 2*** ] 在当前帧上选择符合条件的像素
     Eigen::Vector3i n = this->select(fh, map_out, currentPotential, thFactor);
 
-    std::cout << "All Level number \n"<< n << std::endl;
+    // std::cout << "All Level number \n"<< n << std::endl;
 
     //################################
     // sub-select!
     numHave = n[0] + n[1] + n[2]; // 选择得到的点
     quotia = numWant / numHave;  // 得到的 与 想要的 比例
-    std::cout << "numWant\t" << numWant << "\tnumHave\t" << numHave << "\tQuotia\t" << quotia << std::endl;
+    // std::cout << "numWant\t" << numWant << "\tnumHave\t" << numHave << "\tQuotia\t" << quotia << std::endl;
 
 //[ ***step 3*** ] 计算新的采像素点的, 范围大小, 相当于动态网格了, pot越小取得点越多
     // by default we want to over-sample by 40% just to be sure.
     float K = numHave * (currentPotential + 1) * (currentPotential + 1); // 相当于覆盖的面积, 每一个像素对应一个pot*pot
     idealPotential = sqrtf(K / numWant) - 1;    // round down.
-    std::cout << "idealPotential\t" << idealPotential << std::endl;
+    // std::cout << "idealPotential\t" << idealPotential << std::endl;
     if (idealPotential < 1) idealPotential = 1;
 
 //[ ***step 4*** ] 想要的数目和已经得到的数目, 大于或小于0.25都会重新采样一次
@@ -236,7 +236,7 @@ int PixelSelector::makeMaps(
         idealPotential = currentPotential - 1; // 减小,多采点
 
       currentPotential = idealPotential;
-      std::cout << "currentPotential\t" << currentPotential << std::endl;
+      // std::cout << "currentPotential\t" << currentPotential << std::endl;
 
       return makeMaps(fh, map_out, recursionsLeft - 1, plot, thFactor); //递归
     } else if (recursionsLeft > 0 && quotia < 0.25) {
