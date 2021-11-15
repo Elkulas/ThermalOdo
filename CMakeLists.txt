@@ -8,7 +8,7 @@ include(CTest)
 enable_testing()
 
 ######## packages ########
-set(OpenCV_DIR "/home/jjj/CodeSrc/opencv-4.4.0/build")
+set(OpenCV_DIR "/home/jjj/CodeSrc/opencv-4.5.4/build")
 find_package(OpenCV 4.0 QUIET)
 
 find_package(Eigen3 3.1.0 REQUIRED)

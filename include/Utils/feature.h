@@ -21,6 +21,7 @@
 #include <opencv2/core/eigen.hpp>
 
 // OpenCV 4.0 库
+// contrib
 #include <opencv2/ximgproc.hpp>
 #include "opencv2/imgcodecs.hpp"
 
