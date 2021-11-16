@@ -16,7 +16,7 @@ using namespace cv;
 int main(int argc, char* argv[]){
 
   if(argc < 2){
-    std::cout << "Usage: ./PixelProcess --dir= {Pic Directory}" << std::endl;
+    std::cout << "Usage: ./test_dso_front --dir= {Pic Directory}" << std::endl;
     return 0;
   }
 
