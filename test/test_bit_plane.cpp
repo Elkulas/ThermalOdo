@@ -11,7 +11,7 @@ DEFINE_string(log_dir, "/home/jjj/NGCLAB/ThermalOdo/bin/log", "Log dir");
 int main( int argc, char* argv[]) {
   std::cout << "Hello, That is Bit Plane Test" << std::endl;
 
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  google::ParseCommandLineFlags(&argc, &argv, true);
   cout << "Image dir = " << FLAGS_dir << endl;
 
   google::InitGoogleLogging(argv[0]);

@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
     return 0;
   }
 
-  gflags::ParseCommandLineFlags(&argc, &argv, true);
+  google::ParseCommandLineFlags(&argc, &argv, true);
 
   Mat img0 = imread(FLAGS_dir, 0);
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]){
   float *statusMap = new float[img0.cols * img0.cols];
 
   // detect
-  int num = ps->makeMaps(pixelGradent_, statusMap, 1, true, 2);
+  int num = ps->makeMaps(pixelGradent_, statusMap, 1, false, 2);
   // detect ends
   std::cout << "Get Point number'\t'" << num << std::endl;
   cv::waitKey();
@@ -51,6 +51,9 @@ int main(int argc, char* argv[]){
   }
 
   cv::imshow("output", output);
+
+
+  // 测试带mask版本的
 
   cv::waitKey();
 
