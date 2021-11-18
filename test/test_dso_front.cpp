@@ -85,35 +85,7 @@ int main(int argc, char* argv[]){
   cv::imshow("origin gradient", gradents_origin);
   cv::waitKey();
 
-  // 修改gradient
-  // float * mapmax0 = pixelGradent_->absSquaredGrad[0];
-  // for(int y = 0; y < img0.rows; y++)
-  //   for(int x = 0; x < img0.cols; x++){
-  //     if(mask.at<uchar>(y, x) == 0) {
-  //       mapmax0[x+y * img0.cols] = 0;
-  //     }
-  //   }
-  
-  // float * mapmax1 = pixelGradent_->absSquaredGrad[1];
-  // int step2 = (int)(img0.cols*0.5);
-  // for(int y = 0; y < img0.rows*0.5; y++)
-  //   for(int x = 0; x < img0.cols*0.5; x++){
-  //     if(mask2.at<uchar>(y, x) == 0) {
-  //       mapmax1[x+ y * step2] = 0;
-  //     }
-  //   }
-  
-  // float * mapmax2 = pixelGradent_->absSquaredGrad[2];
-  // int step4 = (int)(img0.cols*0.25);
-  // for(int y = 0; y < img0.rows*0.25; y++)
-  //   for(int x = 0; x < img0.cols*0.25; x++){
-  //     if(mask4.at<uchar>(y, x) == 0) {
-  //       mapmax2[x+y * step4] = 0;
-  //     }
-  //   }
-
   pixelGradent_->computeGradentsWithMask(img0, mask);
-
   
   toCvMat(pixelGradent_->absSquaredGrad[0], gradents_after);
   cv::imshow("origin after", gradents_after);
