@@ -60,8 +60,7 @@ int main(int argc, char* argv[]){
 
   // 生成测试用mask
   cv::Mat mask(img0.rows, img0.cols, CV_8UC1, cv::Scalar(255));
-  cv::Mat mask2;
-  cv::Mat mask4;
+
 
   cv::circle(mask, cv::Point(160, 128), 120, 0, -1);
   cv::circle(mask, cv::Point(480, 128), 90, 0, -1);
@@ -69,13 +68,8 @@ int main(int argc, char* argv[]){
   cv::circle(mask, cv::Point(160, 384), 90, 0, -1);
   cv::circle(mask, cv::Point(480, 384), 90, 0, -1);
 
-  cv::resize(mask, mask2, cv::Size(mask.cols*0.5, mask.rows*0.5));
-  cv::resize(mask2, mask4, cv::Size(mask2.cols*0.5, mask2.rows*0.5));
-
-
   cv::imshow("mask", mask);
-  // cv::imshow("mask2", mask2);
-  // cv::imshow("mask4", mask4);
+
   cv::waitKey();
 
   cv::Mat gradents_origin = cv::Mat(img0.rows, img0.cols, CV_8UC1);
@@ -114,9 +108,6 @@ int main(int argc, char* argv[]){
   cv::imshow("output2", output);
 
   cv::waitKey();
-
-  
-
 
 
 
