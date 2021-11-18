@@ -29,7 +29,8 @@ class PixelGradient
   int hG[PYR_LEVELS];
   int pyrLevelsUsed;
 
-  void computeGradents(const Mat img, int level = 1);
+  void computeGradents(const Mat img);
+  void computeGradentsWithMask(const Mat img, const Mat mask);
   void computeGradentsFor16(const Mat img, Mat &gradents, int level = 1);
  private:
 

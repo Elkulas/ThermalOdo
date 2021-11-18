@@ -52,10 +52,101 @@ int main(int argc, char* argv[]){
 
   cv::imshow("output", output);
 
+  cv::waitKey();
+
 
   // 测试带mask版本的
+  std::cout << "On Test Mask Now " <<std::endl;
+
+  // 生成测试用mask
+  cv::Mat mask(img0.rows, img0.cols, CV_8UC1, cv::Scalar(255));
+  cv::Mat mask2;
+  cv::Mat mask4;
+
+  cv::circle(mask, cv::Point(160, 128), 120, 0, -1);
+  cv::circle(mask, cv::Point(480, 128), 90, 0, -1);
+  cv::circle(mask, cv::Point(320, 256), 30, 0, -1);
+  cv::circle(mask, cv::Point(160, 384), 90, 0, -1);
+  cv::circle(mask, cv::Point(480, 384), 90, 0, -1);
+
+  cv::resize(mask, mask2, cv::Size(mask.cols*0.5, mask.rows*0.5));
+  cv::resize(mask2, mask4, cv::Size(mask2.cols*0.5, mask2.rows*0.5));
+
+
+  cv::imshow("mask", mask);
+  // cv::imshow("mask2", mask2);
+  // cv::imshow("mask4", mask4);
+  cv::waitKey();
+
+  cv::Mat gradents_origin = cv::Mat(img0.rows, img0.cols, CV_8UC1);
+  cv::Mat gradents_after = cv::Mat(img0.rows, img0.cols, CV_8UC1);
+
+  toCvMat(pixelGradent_->absSquaredGrad[0], gradents_origin);
+  cv::imshow("origin gradient", gradents_origin);
+  cv::waitKey();
+
+  // 修改gradient
+  // float * mapmax0 = pixelGradent_->absSquaredGrad[0];
+  // for(int y = 0; y < img0.rows; y++)
+  //   for(int x = 0; x < img0.cols; x++){
+  //     if(mask.at<uchar>(y, x) == 0) {
+  //       mapmax0[x+y * img0.cols] = 0;
+  //     }
+  //   }
+  
+  // float * mapmax1 = pixelGradent_->absSquaredGrad[1];
+  // int step2 = (int)(img0.cols*0.5);
+  // for(int y = 0; y < img0.rows*0.5; y++)
+  //   for(int x = 0; x < img0.cols*0.5; x++){
+  //     if(mask2.at<uchar>(y, x) == 0) {
+  //       mapmax1[x+ y * step2] = 0;
+  //     }
+  //   }
+  
+  // float * mapmax2 = pixelGradent_->absSquaredGrad[2];
+  // int step4 = (int)(img0.cols*0.25);
+  // for(int y = 0; y < img0.rows*0.25; y++)
+  //   for(int x = 0; x < img0.cols*0.25; x++){
+  //     if(mask4.at<uchar>(y, x) == 0) {
+  //       mapmax2[x+y * step4] = 0;
+  //     }
+  //   }
+
+  pixelGradent_->computeGradentsWithMask(img0, mask);
+
+  
+  toCvMat(pixelGradent_->absSquaredGrad[0], gradents_after);
+  cv::imshow("origin after", gradents_after);
+  cv::waitKey();
+
+  // 提点
+  float *statusMap2 = new float[img0.cols * img0.cols];
+
+  // detect
+  int num2 = ps->makeMaps(pixelGradent_, statusMap2, 1, true, 2);
+  // detect ends
+  std::cout << "Get Point number'\t'" << num2 << std::endl;
+
+  cv::Mat output2;
+  img0.copyTo(output2);
+  cv::cvtColor(output2, output2, cv::COLOR_GRAY2RGB);
+
+  // traverse points
+  for (int y = patternPadding + 1; y < img0.rows - patternPadding - 2; y++)
+      for (int x = patternPadding + 1; x < img0.cols - patternPadding - 2; x++) {
+        if(statusMap2[x + y * img0.cols] != 0){
+          cv::circle(output, cv::Point(x, y), 3, cv::Scalar(0, 0, 255), 1);
+        }
+  }
+
+  cv::imshow("output2", output);
 
   cv::waitKey();
+
+  
+
+
+
 
   return 0;
 }
