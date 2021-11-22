@@ -31,7 +31,7 @@ class PixelGradient
 
   void computeGradents(const Mat img);
   void computeGradentsWithMask(const Mat img, const Mat mask);
-  void computeGradentsFor16(const Mat img, Mat &gradents, int level = 1);
+  void computeGradentsFor16(const Mat img);
  private:
 
 };

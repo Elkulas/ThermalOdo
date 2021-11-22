@@ -21,7 +21,7 @@ PixelSelector::PixelSelector(int w, int h, int num, int potential)
 {
   randomPattern = new unsigned char[w*h];
   std::srand(3141592);	// want to be deterministic.
-  for(int i=0;i<w*h;i++) randomPattern[i] = rand() & 0xFF; // 随机数, 取低8位
+  for(int i=0;i<w*h;i++) randomPattern[i] = rand() & 0xFFFF; // 随机数, 取低8位
 
   currentPotential = potential;
 
