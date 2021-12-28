@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.0.0)
 project(thermalodo VERSION 0.1.0)
 
 set( CMAKE_BUILD_TYPE "Release" )
-set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+set( CMAKE_CXX_STANDARD 17)  
+set( CMAKE_CXX_FLAGS "-std=c++17 -O3" )
+set( CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CTest)
 enable_testing()
@@ -67,6 +69,7 @@ src/Utils/feature.cc
 src/Utils/algorithm.cc
 src/Utils/ReadData.cc
 src/Utils/PoseSolve.cc
+src/Utils/BM3D.cpp
 src/bpvo/ProcessRelative.cpp
 )
 
@@ -101,6 +104,15 @@ target_link_libraries(test_dft ${PROJECT_NAME})
 add_executable(test_dso_front test/test_dso_front.cpp)
 target_link_libraries(
     test_dso_front
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}_dso
+    gflags
+    glog
+)
+
+add_executable(test_orb test/test_orb.cpp)
+target_link_libraries(
+    test_orb
     ${PROJECT_NAME}
     ${PROJECT_NAME}_dso
     gflags

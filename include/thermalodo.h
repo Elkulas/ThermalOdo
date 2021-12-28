@@ -41,3 +41,4 @@
 #include "localUtils.h"
 #include "feature.h"
 #include "algorithm.h"
+#include "bm3d.h"

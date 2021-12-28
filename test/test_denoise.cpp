@@ -1,5 +1,9 @@
 #include "thermalodo.h"
 
+#include "bm3d.h"
+#include <opencv2/xphoto/bm3d_image_denoising.hpp>
+
+
 #include "ProcessRelative.h"
 #include <gflags/gflags.h>
 #include <glog/logging.h>
@@ -13,7 +17,18 @@ int main( int argc, char* argv[]) {
   google::ParseCommandLineFlags(&argc, &argv, true);
   cout << "Image dir = " << FLAGS_dir << endl;
 
-  cv::Mat img = cv::imread(FLAGS_dir, cv::IMREAD_GRAYSCALE);
+  // cv::Mat img0 = cv::imread(FLAGS_dir, cv::IMREAD_GRAYSCALE);
+  cv::Mat img0 = cv::imread(FLAGS_dir, -1);
+  std::cout << "type" << img0.type() << std::endl;
+
+  double mmin, mmax;
+  cv::minMaxIdx(img0, &mmin, &mmax);
+  std::cout << "small " << mmin << "big " << mmax << std::endl;
+
+
+
+  cv::Mat img;
+  img0.copyTo(img);
 
   if(img.empty()) {
     printf("failed to read image\n");
@@ -36,7 +51,7 @@ int main( int argc, char* argv[]) {
   for(int i = 0; i < 9; i++)
     std::cout << W.ptr<float>(i)[0] << std::endl;
 
-  W.ptr<float>(0)[0] = 2000.0;
+  W.ptr<float>(0)[0] = 0.0;
 
   cv::Mat w(img.rows, img.rows, CV_32FC1, cv::Scalar(0));
   cv::Mat temp(img.size(), CV_32FC1, cv::Scalar(0));
@@ -52,9 +67,20 @@ int main( int argc, char* argv[]) {
   cv::normalize(temp, temp, 0, 255, cv::NORM_MINMAX, CV_8UC1);
 
   cv::imshow("out", temp);
-
-  cv::imwrite("/home/jjj/out.png", temp);
   
+  cv::waitKey();
+
+  // NLM
+  cv::Mat nlm;
+  std::cout << img0.type() << std::endl;
+  cv::fastNlMeansDenoising(img0, nlm, 3.0, 7, 21);
+  cv::imshow("heloo nlm", nlm);
+  cv::waitKey();
+
+  // BM3D
+  cv::Mat bm3d;
+  cv::xphoto::bm3dDenoising(img0, bm3d);
+  cv::imshow("heloo bm3d", bm3d);
   cv::waitKey();
 
   

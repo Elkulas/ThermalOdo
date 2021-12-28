@@ -8,6 +8,8 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
+#include <opencv2/xfeatures2d.hpp>
+
 DEFINE_string(dir, "", "Input pic directory");
 
 using namespace std;
@@ -24,14 +26,50 @@ int main(int argc, char* argv[]){
 
   Mat img0 = imread(FLAGS_dir, -1);
 
+  std::cout <<img0.type() << std::endl;
+
+  // cv::fastNlMeansDenoising(img0, img0);
+  // cv::medianBlur(img0, img0, 3);
+
+  // test： For range detect
+  // double minv, maxv;
+  // cv::minMaxIdx(img0, &minv, &maxv);
+  // std::cout << minv << '\t' << maxv <<std::endl;
+
+  // // cv::Mat test;
+  // // img0.copyTo(test);
+
+  // cv::Mat test(img0.size(), CV_8UC1);
+  // double minrange = minv;
+  // double maxrange = 4000;
+
+  // for (int j = 0; j < img0.rows; ++j) {
+  //   for (int i = 0; i < img0.cols; ++i) {
+
+  //     if(img0.at<ushort>(j, i) < maxrange)
+  //       (test.at<uchar>(j, i)) = ((img0.at<ushort>(j, i) - minrange) / (maxrange - minrange)) * 255.0;
+  //     else
+  //       test.at<uchar>(j, i) = 255;
+  //   }
+  // }
+  // cv::imshow("shoe", test);
+
+  // cv::imwrite("/home/jjj/NGCLab/ThermalOdo/6.png", test);
+  // cv::waitKey();
+
+  cv::Mat test;
+  img0.copyTo(test);
+  cv::cvtColor(test, test, cv::COLOR_BGR2GRAY);
+  
+
 
   // detect points
   PixelGradient *pixelGradent_ = new PixelGradient;
-  pixelGradent_->computeGradents(img0);
+  pixelGradent_->computeGradents(test);
 
-  PixelSelector::Ptr ps(new PixelSelector(img0.cols, img0.rows, 150, 5));
+  PixelSelector::Ptr ps(new PixelSelector(test.cols, test.rows, 150, 5));
 
-  float *statusMap = new float[img0.cols * img0.cols];
+  float *statusMap = new float[test.cols * test.cols];
 
   // detect
   int num = ps->makeMaps(pixelGradent_, statusMap, 1, false, 2);
@@ -40,7 +78,7 @@ int main(int argc, char* argv[]){
 
   // OUt put
   cv::Mat output;
-  cv::normalize(img0, output, 0, 255, cv::NORM_MINMAX, CV_8UC1);
+  cv::normalize(test, output, 0, 255, cv::NORM_MINMAX, CV_8UC1);
   cv::cvtColor(output, output, cv::COLOR_GRAY2RGB);
 
   // traverse points
