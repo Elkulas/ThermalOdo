@@ -1,0 +1,95 @@
+<html><meta charset="UTF-8"><pre>
+<font color=blue>mcc -W 'cpplib:libsvd_mean_recompute_denoise_first_eigen_zero,all' -T link:lib -d /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing -v /home/jjj/NGCLab/ThermalOdo/img/svd_mean_recompute_denoise_first_eigen_zero.m </font>
+Compiler version: 8.3 (R2021b)
+
+Analyzing file dependencies. 
+
+Parsing file "/home/jjj/NGCLab/ThermalOdo/img/svd_mean_recompute_denoise_first_eigen_zero.m"
+	(referenced from command line).
+Generating file "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/readme.txt".
+Generating file "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.h".
+Generating file "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.cpp".
+Generating file "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.exports".
+Generating file "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/v2/generic_interface/readme.txt".
+Executing command: "/usr/local/MATLAB/R2021b/bin/mbuild"  -client mbuild -O -v -output "libsvd_mean_recompute_denoise_first_eigen_zero" -I"/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing" "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.cpp" CXXFLAGS="-fPIC -ansi -pthread -std=c++11" LDEXT=".so" LDTYPE="-shared " -outdir "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing"
+Verbose mode is on.
+... Looking for compiler 'g++' ...
+... Executing command 'which g++' ...Yes ('/usr/bin/g++').
+... Executing command 'g++ -print-file-name=libstdc++.so' ...Yes ('/usr/lib/gcc/x86_64-linux-gnu/5/libstdc++.so').
+... Executing command 'g++ -dumpversion' ...Yes ('5.4.0').
+... Executing command 'which g++' ...Yes ('/usr/bin/g++').
+... Looking for folder '/usr' ...Yes.
+... Executing command 'g++ -dumpmachine' ...Yes ('x86_64-linux-gnu').
+Found installed compiler 'g++'.
+Set INCLUDE = /usr/lib/gcc/x86_64-linux-gnu/5.4.0/include;/usr/include/c++/5.4.0;/usr/include/c++/5.4.0/x86_64-linux-gnu;/usr/include/c++/5.4.0/backward;
+Options file details
+-------------------------------------------------------------------
+	Compiler location: /usr/bin/g++
+	Options file: /home/jjj/.matlab/R2021b/MBUILD_C++_glnxa64.xml
+	CMDLINE1 : /usr/bin/g++ -c -DMATLAB_DEFAULT_RELEASE=R2017b  -DUSE_MEX_CMD   -D_GNU_SOURCE  -DUNIX -DX11 -DGLNXA64 -DGCC -UMX_COMPAT_SC -I"/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing"  -I"/usr/local/MATLAB/R2021b/extern/include" -I"/usr/local/MATLAB/R2021b/simulink/include" -I"/usr/local/MATLAB/R2021b/extern/include/cpp" -fPIC -ansi -pthread -std=c++11 -O2 -fwrapv -DNDEBUG "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.cpp" -o /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.o
+	CMDLINE2 : /usr/bin/g++ -pthread -lpthread -Wl,--as-needed -Wl,-rpath-link,/usr/local/MATLAB/R2021b/bin/glnxa64 -shared -O  /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.o   "/usr/local/MATLAB/R2021b/sys/os/glnxa64/orig/libstdc++.so.6" $MW_GLIBC_SHIM -L"/usr/local/MATLAB/R2021b/runtime/glnxa64" -L"/usr/local/MATLAB/R2021b/extern/bin/glnxa64" -lm -lmwmclmcrrt -lMatlabDataArray -lMatlabCppSharedLib -o /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.so
+	CXX : /usr/bin/g++
+	DEFINES : -DMATLAB_DEFAULT_RELEASE=R2017b  -DUSE_MEX_CMD   -D_GNU_SOURCE  -DUNIX -DX11 -DGLNXA64 -DGCC -UMX_COMPAT_SC
+	MATLABMEX : 
+	CFLAGS : -fexceptions -fPIC -fno-omit-frame-pointer -pthread
+	CXXFLAGS : -fPIC -ansi -pthread -std=c++11
+	INCLUDE : -I"/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing"  -I"/usr/local/MATLAB/R2021b/extern/include" -I"/usr/local/MATLAB/R2021b/simulink/include" -I"/usr/local/MATLAB/R2021b/extern/include/cpp"
+	CXXOPTIMFLAGS : -O2 -fwrapv -DNDEBUG
+	CXXDEBUGFLAGS : -g
+	LDXX : /usr/bin/g++
+	LDFLAGS : -pthread -lpthread -Wl,--as-needed -Wl,-rpath-link,/usr/local/MATLAB/R2021b/bin/glnxa64
+	LDTYPE : -shared
+	LINKEXPORT : 
+	LINKEXPORTVER : 
+	LINKLIBS : "/usr/local/MATLAB/R2021b/sys/os/glnxa64/orig/libstdc++.so.6" $MW_GLIBC_SHIM -L"/usr/local/MATLAB/R2021b/runtime/glnxa64" -L"/usr/local/MATLAB/R2021b/extern/bin/glnxa64" -lm -lmwmclmcrrt -lMatlabDataArray -lMatlabCppSharedLib
+	LDOPTIMFLAGS : -O
+	LDDEBUGFLAGS : -g
+	MWCPPLIB : "/usr/local/MATLAB/R2021b/sys/os/glnxa64/orig/libstdc++.so.6"
+	OBJEXT : .o
+	LDEXT : .so
+	SETENV : CC="gcc"
+                CXX="/usr/bin/g++"
+                CFLAGS="-fexceptions -fPIC -fno-omit-frame-pointer -pthread -DMATLAB_DEFAULT_RELEASE=R2017b  -DUSE_MEX_CMD   -D_GNU_SOURCE  -DUNIX -DX11 -DGLNXA64 -DGCC -UMX_COMPAT_SC"
+                CXXFLAGS="-fPIC -ansi -pthread -std=c++11 -DMATLAB_DEFAULT_RELEASE=R2017b  -DUSE_MEX_CMD   -D_GNU_SOURCE  -DUNIX -DX11 -DGLNXA64 -DGCC -UMX_COMPAT_SC"
+                COPTIMFLAGS="-O2 -fwrapv -DNDEBUG"
+                CXXOPTIMFLAGS="-O2 -fwrapv -DNDEBUG"
+                CDEBUGFLAGS="-g"
+                CXXDEBUGFLAGS="-g"
+                MW_GLIBC_SHIM="$MW_GLIBC_SHIM"
+                LD="gcc"
+                LDXX="/usr/bin/g++"
+                LDFLAGS="-pthread -lpthread -Wl,--as-needed -Wl,-rpath-link,/usr/local/MATLAB/R2021b/bin/glnxa64 -shared "/usr/local/MATLAB/R2021b/sys/os/glnxa64/orig/libstdc++.so.6" $MW_GLIBC_SHIM -L"/usr/local/MATLAB/R2021b/runtime/glnxa64" -L"/usr/local/MATLAB/R2021b/extern/bin/glnxa64" -lm -lmwmclmcrrt -lMatlabDataArray -lMatlabCppSharedLib "
+                LDDEBUGFLAGS="-g"
+	GCC : /usr/bin/g++
+	CPPLIB_DIR : /usr/lib/gcc/x86_64-linux-gnu/5/libstdc++.so
+	VER : 5.4.0
+	GCCDIR : /usr
+	GCC_TARGET : x86_64-linux-gnu
+	MATLABROOT : /usr/local/MATLAB/R2021b
+	ARCH : glnxa64
+	SRC : "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.cpp"
+	OBJ : /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.o
+	OBJS : /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.o 
+	SRCROOT : /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero
+	DEF : /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.def
+	EXP : "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.exp"
+	LIB : "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.lib"
+	EXE : /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.so
+	ILK : "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.ilk"
+	MANIFEST : "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.so.manifest"
+	TEMPNAME : /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero
+	EXEDIR : /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/
+	EXENAME : libsvd_mean_recompute_denoise_first_eigen_zero
+	OPTIM : -O2 -fwrapv -DNDEBUG
+	LINKOPTIM : -O
+-------------------------------------------------------------------
+Building with 'g++'.
+/usr/bin/g++ -c -DMATLAB_DEFAULT_RELEASE=R2017b  -DUSE_MEX_CMD   -D_GNU_SOURCE  -DUNIX -DX11 -DGLNXA64 -DGCC -UMX_COMPAT_SC -I"/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing"  -I"/usr/local/MATLAB/R2021b/extern/include" -I"/usr/local/MATLAB/R2021b/simulink/include" -I"/usr/local/MATLAB/R2021b/extern/include/cpp" -fPIC -ansi -pthread -std=c++11 -O2 -fwrapv -DNDEBUG "/home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.cpp" -o /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.o
+/usr/bin/g++ -pthread -lpthread -Wl,--as-needed -Wl,-rpath-link,/usr/local/MATLAB/R2021b/bin/glnxa64 -shared -O  /tmp/mex_1545582148128576_442/libsvd_mean_recompute_denoise_first_eigen_zero.o   "/usr/local/MATLAB/R2021b/sys/os/glnxa64/orig/libstdc++.so.6" $MW_GLIBC_SHIM -L"/usr/local/MATLAB/R2021b/runtime/glnxa64" -L"/usr/local/MATLAB/R2021b/extern/bin/glnxa64" -lm -lmwmclmcrrt -lMatlabDataArray -lMatlabCppSharedLib -o /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_testing/libsvd_mean_recompute_denoise_first_eigen_zero.so
+<font color=blue>Packaging...</font>
+Creating the bundle...
+Creating the install agent URL file...
+Web based installer created at /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero/for_redistribution/MyAppInstaller_web.install.
+Packaging complete.
+Elapsed packaging time was: 5 seconds.
+</pre></html>

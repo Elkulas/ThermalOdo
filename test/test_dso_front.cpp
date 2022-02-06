@@ -8,7 +8,49 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 
-#include <opencv2/xfeatures2d.hpp>
+#include <ctime>
+
+// #include <opencv2/xfeatures2d.hpp>
+
+// #include "matrix.h"
+// #include "mclmcr.h"
+#include "mclmcrrt.h"
+#include "mclcppclass.h"
+#include "libsvd_mean_recompute_denoise_first_eigen_zero.h"
+
+
+mwArray Mat2mwArray(cv::Mat src){
+	// if (src.type() != CV_64FC1);
+	// 	src.convertTo(src, CV_64FC1, 1.0, 0);
+
+	mwArray dst(src.rows, src.cols, mxUINT8_CLASS); //
+	cv::Mat src_t = src.t();
+	dst.SetData(src_t.data, src.rows*src.cols); //
+	
+	return dst;
+}
+
+cv::Mat mwArry2Mat(mwArray src, int rows, int cols){
+	if (src.IsEmpty()) //
+		return cv::Mat();
+ 
+	cv::Mat dst = cv::Mat::zeros(rows, cols, CV_64FC1);
+	for (int j(0); j<rows; ++j)
+	{
+		double* pdata = dst.ptr<double>(j);
+		for (int i(0); i<cols; ++i)
+		{
+			pdata[i] = src(j + 1, i + 1); /// 元素访问（行号，列号）
+      if(i < 10 && j < 5)
+      cout << " " << pdata[i] ;
+		}
+    if(j < 5)
+    cout << '\n';
+	}
+	return dst;
+}
+
+
 
 DEFINE_string(dir, "", "Input pic directory");
 
@@ -24,7 +66,23 @@ int main(int argc, char* argv[]){
 
   google::ParseCommandLineFlags(&argc, &argv, true);
 
-  Mat img0 = imread(FLAGS_dir, -1);
+  Mat img0 = imread(FLAGS_dir);
+
+  // svd_mean_recompute_denoise_first_eigen_zero(img0);
+
+  
+  clock_t startt0  = clock();
+
+  if(libsvd_mean_recompute_denoise_first_eigen_zeroInitialize())
+  {
+    cout << "wocao! KEYIDE!" << endl;
+  }
+  else{
+    cout << "heloo" << endl;
+  }
+  clock_t endt0  = clock();
+
+  cout << "load runtime is "<< (double)(endt0 - startt0) / CLOCKS_PER_SEC << endl;
 
   std::cout <<img0.type() << std::endl;
 
@@ -60,7 +118,45 @@ int main(int argc, char* argv[]){
   cv::Mat test;
   img0.copyTo(test);
   cv::cvtColor(test, test, cv::COLOR_BGR2GRAY);
-  
+
+  // cv::Mat test2;
+	// test.convertTo(test2, CV_64FC1, 1.0, 0);
+
+
+  mwArray mtlb_img = Mat2mwArray(test);
+  mwArray mtlb_img_cout;
+
+  clock_t startt  = clock();
+
+  svd_mean_recompute_denoise_first_eigen_zero(1, mtlb_img_cout, mtlb_img);
+  clock_t endt  = clock();
+
+  cout << "runtime is "<< (double)(endt - startt) / CLOCKS_PER_SEC << endl;
+
+
+  cv::Mat mtlb_out = mwArry2Mat(mtlb_img_cout, img0.rows, img0.cols);
+
+  cout << mtlb_out.type() << endl;
+
+  cv::Mat outtest;
+  clock_t startt2  = clock();
+
+  mtlb_out.convertTo(outtest, CV_8UC1, 255, 0);
+  clock_t endt2  = clock();
+
+  cout << "runtime is "<< (double)(endt2 - startt2) / CLOCKS_PER_SEC << endl;
+
+  double minv, maxv;
+  cv::Point minid, maxid;
+
+
+  minMaxLoc(test, &minv, &maxv, &minid, &maxid);
+  cout << minv << " " << maxv << " " << maxid << endl;
+
+  imshow("sh", outtest);
+  cv::waitKey();
+
+  outtest.copyTo(test);
 
 
   // detect points

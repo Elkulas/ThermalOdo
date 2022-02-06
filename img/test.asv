@@ -1,0 +1,13 @@
+close all;
+clc;
+
+I = imread('1.png');
+
+I2  = I(:, :, 1);
+
+I3 = im2double(I)
+tic;
+J = svd_mean_recompute_denoise_first_eigen_zero(I);
+toc;
+imshow(J);
+imwrite(J, '1-equ.png');

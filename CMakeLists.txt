@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.0.0)
 project(thermalodo VERSION 0.1.0)
 
 set( CMAKE_BUILD_TYPE "Release" )
-set( CMAKE_CXX_STANDARD 17)  
-set( CMAKE_CXX_FLAGS "-std=c++17 -O3" )
-set( CMAKE_CXX_STANDARD_REQUIRED ON)
+# set( CMAKE_CXX_STANDARD 17)  
+set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+# set( CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CTest)
 enable_testing()
@@ -48,6 +48,16 @@ include_directories(
     ${PCL_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     ${gflags_INCLUDE_DIR}
+)
+# MATLAB
+set(LIBMWM /usr/local/MATLAB/R2021b/runtime/glnxa64/)
+include_directories(
+    ${LIBMWM}
+)
+
+set(MATLAB_ROOT /usr/local/MATLAB/R2021b/)
+include_directories(
+    ${MATLAB_ROOT}extern/include/
 )
 
 ####### subs ######
@@ -109,6 +119,14 @@ target_link_libraries(
     gflags
     glog
 )
+
+target_link_libraries(
+    test_dso_front
+    # /usr/local/MATLAB/R2021b/bin/glnxa64/libmwmclmcr.so
+    /usr/local/MATLAB/R2021b/runtime/glnxa64/libmwmclmcrrt.so
+    /home/jjj/NGCLab/ThermalOdo/img/libsvd_mean_recompute_denoise_first_eigen_zero.so
+)
+
 
 add_executable(test_orb test/test_orb.cpp)
 target_link_libraries(
