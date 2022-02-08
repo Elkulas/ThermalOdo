@@ -111,6 +111,15 @@ target_link_libraries(test_denoise ${PROJECT_NAME} gflags glog)
 add_executable(test_dft test/test_dft.cpp)
 target_link_libraries(test_dft ${PROJECT_NAME})
 
+add_executable(test_image_svd test/test_image_svd.cpp)
+target_link_libraries(
+    test_image_svd
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}_dso
+    gflags
+    glog
+)
+
 add_executable(test_dso_front test/test_dso_front.cpp)
 target_link_libraries(
     test_dso_front

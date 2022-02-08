@@ -129,7 +129,7 @@ void PixelGradient::computeGradents(const Mat img)
       dabs_l[idx] = dx * dx + dy * dy; // 梯度平方
       mean_grident += sqrtf(dabs_l[idx]);
     }
-    std::cout << "mean grident of level" << lvl << "=" << mean_grident / (wl * hl) << std::endl;
+    // std::cout << "mean grident of level" << lvl << "=" << mean_grident / (wl * hl) << std::endl;
 
   } // 遍历完毕各个层
 
@@ -282,7 +282,7 @@ void PixelGradient::computeGradentsWithMask(const Mat img, const Mat mask)
 
       mean_grident += sqrtf(dabs_l[idx]);
     }
-    std::cout << "With Mask mean grident of level" << lvl << "=" << mean_grident / (wl * hl) << std::endl;
+    // std::cout << "With Mask mean grident of level" << lvl << "=" << mean_grident / (wl * hl) << std::endl;
 
   } // 遍历完毕各个层
 

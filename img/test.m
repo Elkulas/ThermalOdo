@@ -1,7 +1,7 @@
 close all;
 clc;
 
-I = imread('1.png');
+I = imread('2.png');
 
 I2  = I(:, :, 1);
 
