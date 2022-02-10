@@ -34,5 +34,7 @@ mi = imnlmfilt(mi, ...
 m = medfilt2(mi,[2 2]);
 m = m+100;
 m = mat2gray(m, [0, 200]);
+% m = mat2gray(m);
+
 
 end

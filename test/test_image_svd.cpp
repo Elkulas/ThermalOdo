@@ -20,6 +20,7 @@ using namespace cv;
 
 void detectdso(Mat& img);
 
+cv::Mat DenoiseNew(cv::Mat& img, double scale = 0.25, bool use_nlm = true, int template_w = 3, int search_w = 11);
 
 cv::Mat Denoise(cv::Mat& img, double scale = 0.25, bool use_nlm = true, int template_w = 3, int search_w = 11){
   
@@ -29,17 +30,17 @@ cv::Mat Denoise(cv::Mat& img, double scale = 0.25, bool use_nlm = true, int temp
   img.copyTo(src);
 
   if(src.type() == 16)
-    cvtColor(src, src, COLOR_BGR2GRAY);
+    cv::cvtColor(src, src, cv::COLOR_BGR2GRAY);
 
   src.convertTo(src, CV_32FC1);
   cv::normalize(src, src, 0.0, 1.0, NORM_MINMAX);
 
-  resize(src, src, Size(src.cols * scale, src.rows * scale));
+  cv::resize(src, src, cv::Size(src.cols * scale, src.rows * scale));
 
-  Mat U, W, V;
+  cv::Mat U, W, V;
   cv::SVD::compute(src, W, U, V);
 
-  Mat w = Mat::zeros(Size(W.rows, W.rows), CV_32FC1);
+  cv::Mat w = Mat::zeros(cv::Size(W.rows, W.rows), CV_32FC1);
 
   W.ptr<float>(0)[0] = 0;
 
@@ -53,20 +54,20 @@ cv::Mat Denoise(cv::Mat& img, double scale = 0.25, bool use_nlm = true, int temp
   for (int i = 0; i < W.rows; ++i)
     w.ptr<float>(i)[i] = mean_val + (float)(W.rows-i);
   
-  Mat result = U*w*V;
+  cv::Mat result = U*w*V;
   
-  cv::normalize(result, result, 0.0, 255.0, NORM_MINMAX);
+  cv::normalize(result, result, 0.0, 255.0, cv::NormTypes::NORM_MINMAX);
 
   result.convertTo(result, CV_8UC1);
 
   if(use_nlm)
-    fastNlMeansDenoising(result, result, 3.0F, template_w, search_w);
+    cv::fastNlMeansDenoising(result, result, 3.0F, template_w, search_w);
   // medianBlur(result, result, 3);
 
   // 放大
-  resize(result, result, Size(src.cols / scale, src.rows / scale));
+  cv::resize(result, result, cv::Size(src.cols / scale, src.rows / scale));
 
-  medianBlur(result, result, 3);
+  cv::medianBlur(result, result, 7);
 
   return result;
 
@@ -95,6 +96,11 @@ int main(int argc, char* argv[]){
   Mat img_svd;
   img0.copyTo(img_svd);
   cvtColor(img_svd, img_svd, COLOR_BGR2GRAY);
+
+  Mat testm;
+  img_svd.copyTo(testm);
+  medianBlur(testm, testm, 3);
+  detectdso(testm);
   
   Mat test_svd;
   img_svd.convertTo(test_svd, CV_32FC1);
@@ -102,39 +108,41 @@ int main(int argc, char* argv[]){
 
   // 测试普通的
   {
-    // Mat U, W, V;
-    // st = clock();
-    // cv::SVD::compute(test_svd, W, U, V);
+    Mat U, W, V;
+    st = clock();
+    cv::SVD::compute(test_svd, W, U, V);
     
     
-    // Mat w = Mat::zeros(Size(W.rows, W.rows), CV_32FC1);
+    Mat w = Mat::zeros(Size(W.rows, W.rows), CV_32FC1);
 
-    // // W.ptr<float>(0)[0] = 0;
+    // W.ptr<float>(0)[0] = 0;
 
-    // for (int i = 0; i < W.rows; ++i)
-    //   w.ptr<float>(i)[i] = W.ptr<float>(i)[0];
+    for (int i = 0; i < W.rows; ++i)
+      w.ptr<float>(i)[i] = W.ptr<float>(i)[0];
     
-    // Mat result = U*w*V;
+    Mat result = U*w*V;
 
-    // cv::normalize(result, result, 0.0, 255.0, NORM_MINMAX);
+    cv::normalize(result, result, 0.0, 255.0, NORM_MINMAX);
 
-    // result.convertTo(result, CV_8UC1);
+    result.convertTo(result, CV_8UC1);
 
-    // et = clock();
-    // cout << "OPENCV SVD runtime is "<< (float)(et - st) / CLOCKS_PER_SEC << endl;
+    et = clock();
+    cout << "OPENCV SVD runtime is "<< (float)(et - st) / CLOCKS_PER_SEC << endl;
 
-    // imshow("hw2", result);
+    imshow("hw2", result);
 
-    // detectdso(result);
+    detectdso(result);
 
 
-    // waitKey();
+    waitKey();
   }
 
   // 测试普通的 + mean
   {
     st = clock();
-    Mat img00 = Denoise(img_svd, 0.25, true, 3, 7);
+    Mat img00 = Denoise(img_svd, 1, true, 7, 21);
+    Mat img01 = DenoiseNew(img_svd, 1, true, 7, 21);
+    
     et = clock();
     cout << "resize SVD mean runtime is "<< (float)(et - st) / CLOCKS_PER_SEC * 1000 << endl;
     imshow("hisd", img00);
@@ -462,4 +470,70 @@ void detectdso(Mat& img)
   imwrite("/home/jjj/NGCLab/ThermalOdo/temp/detect2.png", gradents);
 
   cv::waitKey();
+}
+
+
+cv::Mat DenoiseNew(cv::Mat& img, double scale, bool use_nlm, int template_w, int search_w){
+  
+  // type
+
+  cv::Mat src;
+  img.copyTo(src);
+
+  if(src.type() == 16)
+    cv::cvtColor(src, src, cv::COLOR_BGR2GRAY);
+
+  src.convertTo(src, CV_32FC1);
+  cv::normalize(src, src, 0.0, 1.0, cv::NormTypes::NORM_MINMAX);
+
+  cv::resize(src, src, cv::Size(src.cols * scale, src.rows * scale));
+
+  cv::Mat U, W, V;
+  cv::SVD::compute(src, W, U, V);
+
+  cv::Mat w = Mat::zeros(cv::Size(W.rows, W.rows), CV_32FC1);
+
+  W.ptr<float>(0)[0] = 0;
+
+  float mean_val = 0;
+  for(int i = 0; i < W.rows; ++i)
+    mean_val += W.ptr<float>(i)[0];
+  
+  mean_val = mean_val / (float)W.rows;
+
+  // 倒序赋值
+  for (int i = 0; i < W.rows; ++i)
+    w.ptr<float>(i)[i] = mean_val + (float)(W.rows-i);
+  
+  cv::Mat result = U*w*V;
+
+
+
+  result = result + 100.0;
+
+  for(int i = 0; i < result.rows; i++)
+    for(int j = 0; j < result.cols; j++){
+      if(result.ptr<float>(i)[j] > 200)
+        result.ptr<float>(i)[j] = 200;
+      else if(result.ptr<float>(i)[j] < 0)
+        result.ptr<float>(i)[j] = 0;
+    }
+
+
+  
+  cv::normalize(result, result, 0.0, 255.0, cv::NormTypes::NORM_MINMAX);
+
+  result.convertTo(result, CV_8UC1);
+
+  if(use_nlm)
+    cv::fastNlMeansDenoising(result, result, 3.0F, template_w, search_w);
+  // medianBlur(result, result, 3);
+
+  // 放大
+  cv::resize(result, result, cv::Size(src.cols / scale, src.rows / scale));
+
+  cv::medianBlur(result, result, 7);
+
+  return result;
+
 }
