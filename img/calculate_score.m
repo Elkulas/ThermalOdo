@@ -1,7 +1,7 @@
 close all;
 clc;
 
-img = imread(['21.png']);
+img = imread(['11.png']);
 
 if size(img,3) == 3
     img = rgb2gray(img);

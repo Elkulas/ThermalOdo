@@ -146,6 +146,15 @@ target_link_libraries(
     glog
 )
 
+add_executable(image_expriment_iros test/image_expriment_iros.cpp)
+target_link_libraries(
+    image_expriment_iros
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}_dso
+    gflags
+    glog
+)
+
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
