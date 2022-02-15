@@ -146,9 +146,9 @@ target_link_libraries(
     glog
 )
 
-add_executable(image_expriment_iros test/image_expriment_iros.cpp)
+add_executable(expriment_iros test/expriment_iros.cpp)
 target_link_libraries(
-    image_expriment_iros
+    expriment_iros
     ${PROJECT_NAME}
     ${PROJECT_NAME}_dso
     gflags
