@@ -85,19 +85,19 @@ int main(int argc, char* argv[]){
 
   // ORB 提点
   {
-    // std::vector<cv::KeyPoint> KeyPoint_origin, KeyPoint_denoise;
-    // cv::Ptr<cv::ORB> orb = cv::ORB::create(number);
-    // orb->detect(origin_gray, KeyPoint_origin);
-    // orb->detect(denoise_gray, KeyPoint_denoise);
-    // // 画图
-    // Mat out_origin, out_denoise;
-    // origin_rgb.copyTo(out_origin);
-    // denoise_rgb.copyTo(out_denoise);
-    // cv::drawKeypoints(out_origin, KeyPoint_origin, out_origin, cv::Scalar(0, 255, 0));
-    // cv::drawKeypoints(out_denoise, KeyPoint_denoise, out_denoise, cv::Scalar(0, 255, 0));
-    // cv::imshow("origin_orb", out_origin);
-    // cv::imshow("denoise_orb", out_denoise);
-    // cv::waitKey();
+    std::vector<cv::KeyPoint> KeyPoint_origin, KeyPoint_denoise;
+    cv::Ptr<cv::ORB> orb = cv::ORB::create(number);
+    orb->detect(origin_gray, KeyPoint_origin);
+    orb->detect(denoise_gray, KeyPoint_denoise);
+    // 画图
+    Mat out_origin, out_denoise;
+    origin_rgb.copyTo(out_origin);
+    denoise_rgb.copyTo(out_denoise);
+    cv::drawKeypoints(out_origin, KeyPoint_origin, out_origin, cv::Scalar(0, 255, 0));
+    cv::drawKeypoints(out_denoise, KeyPoint_denoise, out_denoise, cv::Scalar(0, 255, 0));
+    cv::imshow("origin_orb", out_origin);
+    cv::imshow("denoise_orb", out_denoise);
+    cv::waitKey();
   }
 
   // ORBSLAM 提点
@@ -131,55 +131,64 @@ int main(int argc, char* argv[]){
     }
 
     cv::imshow("origin_orb_slam", out_origin);
-    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/origin_orb_slam.png", out_origin);
+    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/origin_orb_slam.jpg", out_origin);
     cv::imshow("denoise_orb_slam", out_denoise);
-    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/denoise_orb_slam.png", out_denoise);
+    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/denoise_orb_slam.jpg", out_denoise);
     cv::waitKey();
   }
 
   // SIFT 提点
   {
-    // Mat out_origin, out_denoise;
-    // origin_rgb.copyTo(out_origin);
-    // denoise_rgb.copyTo(out_denoise);
+    Mat out_origin, out_denoise;
+    origin_rgb.copyTo(out_origin);
+    denoise_rgb.copyTo(out_denoise);
 
-    // std::vector<cv::KeyPoint> KeyPoint_origin, KeyPoint_denoise;
-    // cv::Ptr<cv::SIFT> sift = cv::SIFT::create(number, 3, 0.01f, 3, 1.6);
-    // sift->detect(origin_gray, KeyPoint_origin);
-    // cout << KeyPoint_origin.size() << endl;
-    // sift->detect(denoise_gray, KeyPoint_denoise);
-    // // 画图
+    std::vector<cv::KeyPoint> KeyPoint_origin, KeyPoint_denoise;
+    cv::Ptr<cv::SIFT> sift = cv::SIFT::create(number, 3, 0.01f, 3, 1.6);
+    sift->detect(origin_gray, KeyPoint_origin);
+    cout << KeyPoint_origin.size() << endl;
+    sift->detect(denoise_gray, KeyPoint_denoise);
+    // 画图
     // cv::drawKeypoints(out_origin, KeyPoint_origin, out_origin, cv::Scalar(0, 255, 0));
     // cv::drawKeypoints(out_denoise, KeyPoint_denoise, out_denoise, cv::Scalar(0, 255, 0));
 
-    // cv::imshow("origin_sift", out_origin);
-    // imwrite("/home/jjj/NGCLab/ThermalOdo/temp/origin_sift.png", out_origin);
-    // cv::imshow("denoise_sift", out_denoise);
-    // imwrite("/home/jjj/NGCLab/ThermalOdo/temp/denoise_sift.png", out_denoise);
-    // cv::waitKey();
+    for(int i = 0; i < KeyPoint_origin.size(); i++){
+      cv::circle(out_origin, KeyPoint_origin[i].pt, 5, cv::Scalar(0, 255, 0), 1, 16);
+    }
+    for(int i = 0; i < KeyPoint_denoise.size(); i++){
+      cv::circle(out_denoise, KeyPoint_denoise[i].pt, 5, cv::Scalar(0, 255, 0), 1, 16);
+    }
+
+    cv::imshow("origin_sift", out_origin);
+    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/origin_sift.png", out_origin);
+    cv::imshow("denoise_sift", out_denoise);
+    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/denoise_sift.png", out_denoise);
+    cv::waitKey();
   } 
   // Harris 提点
   {
-    // Mat out_origin, out_denoise;
-    // origin_rgb.copyTo(out_origin);
-    // denoise_rgb.copyTo(out_denoise);
+    Mat out_origin, out_denoise;
+    origin_rgb.copyTo(out_origin);
+    denoise_rgb.copyTo(out_denoise);
 
-    // vector<cv::Point2f> n_pts, n_pts2;
-    // cv::goodFeaturesToTrack(origin_gray, n_pts, number, 0.0001, 2, noArray(), 3, true);
+    vector<cv::Point2f> n_pts, n_pts2;
+    cv::goodFeaturesToTrack(origin_gray, n_pts, number, 0.001, 2, noArray(), 3, false);
 
-    // cv::goodFeaturesToTrack(denoise_gray, n_pts2, number, 0.0001, 2, noArray(), 3, true);
+    cv::goodFeaturesToTrack(denoise_gray, n_pts2, number, 0.005, 2, noArray(), 3, false);
 
-    // for(int i = 0; i < n_pts.size(); i++){
-    //   cv::circle(out_origin, n_pts[i], 3, cv::Scalar(0, 255, 0), 1, 16);
-    // }
+    for(int i = 0; i < n_pts.size(); i++){
+      cv::circle(out_origin, n_pts[i], 5, cv::Scalar(0, 255, 0), 1, 16);
+    }
 
-    // for(int i = 0; i < n_pts.size(); i++){
-    //   cv::circle(out_denoise, n_pts2[i], 3, cv::Scalar(0, 255, 0), 1, 16);
-    // }
+    for(int i = 0; i < n_pts.size(); i++){
+      cv::circle(out_denoise, n_pts2[i], 5, cv::Scalar(0, 255, 0), 1, 16);
+    }
 
-    // cv::imshow("origin_harris", out_origin);
-    // cv::imshow("denoise_harris", out_denoise);
-    // cv::waitKey();
+    cv::imshow("origin_harris", out_origin);
+    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/origin_harris.jpg", out_origin);
+    cv::imshow("denoise_harris", out_denoise);
+    imwrite("/home/jjj/NGCLab/ThermalOdo/temp/denoise_harris.jpg", out_denoise);
+    cv::waitKey();
 
 
   }
@@ -215,7 +224,7 @@ Mat detectdso(Mat& img, int num2, Mat& out)
   for (int y = 2 + 1; y < output.rows - 2 - 2; y++)
       for (int x = 2 + 1; x < output.cols - 2 - 2; x++) {
         if(statusMap[x + y * output.cols] != 0){
-          cv::circle(out, cv::Point(x, y), 3, cv::Scalar(0, 255, 0), 1, 16);
+          cv::circle(out, cv::Point(x, y), 5, cv::Scalar(0, 255, 0), 1, 16);
         }
   }
   

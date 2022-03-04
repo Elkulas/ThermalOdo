@@ -155,6 +155,15 @@ target_link_libraries(
     glog
 )
 
+add_executable(expriment_graduate test/expriment_graduate.cpp)
+target_link_libraries(
+    expriment_graduate
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}_dso
+    gflags
+    glog
+)
+
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
